@@ -27,7 +27,8 @@
   xmml_version CDATA #FIXED "0.1">
 
 <!ELEMENT description (#PCDATA)>
-<!ATTLIST description>
+<!ATTLIST description
+  version CDATA #IMPLIED>
 
 <!ELEMENT definitions (datatype*,converter*,submodel+)>
 
@@ -48,14 +49,13 @@
   datatype IDREF #REQUIRED
   src (from|to) "to">
 
-<!ELEMENT submodel (description?,timescale,spacescale*,otherscale*,param*,ports,implementation?,extra*)>
+<!ELEMENT submodel (timescale,spacescale*,otherscale*,param*,ports,implementation?,extra*)>
 <!ATTLIST submodel
   %real;
   name CDATA #IMPLIED
   init (yes|no) "no"
   stateful (yes|no|optional) "no"
-  version CDATA #IMPLIED
-	interactive (yes|no) "no">
+  version CDATA #IMPLIED>
   
 <!ELEMENT implementation (platform*,library*)>
 <!ATTLIST implementation
@@ -115,17 +115,14 @@
   id ID #IMPLIED
   submodel IDREF #REQUIRED
   domain CDATA #IMPLIED
-  init (yes|no) #IMPLIED
-	interactive (yes|no) #IMPLIED
-	stateful (yes|no|optional) #IMPLIED>
+  init (yes|no) #IMPLIED>
   
 <!ELEMENT coupling (filter*)>
 <!ATTLIST coupling
   name CDATA #IMPLIED
   from CDATA #REQUIRED
   to CDATA #REQUIRED
-  size CDATA #IMPLIED
-	interactive (yes|no) "no">
+  size CDATA #IMPLIED>
 
 <!ELEMENT filter EMPTY>
 <!ATTLIST filter
