@@ -6,7 +6,7 @@
     </description>
 
     <definitions>
-      <xi:include href="isr_meta-2011-01-10.xml#xpointer(/metadata/*)"/>
+      <xi:include href="isr_meta.xml#xpointer(/metadata/*)"/>
 
       <submodel id="C1D" name="Canal1D" init="yes">
         <timescale delta="10 min" max="1 yr"/>
