@@ -19,6 +19,15 @@
 		<xs:attribute name="from" type="xs:string" use="required"/>
 		<xs:attribute name="to" type="xs:string" use="required"/>
 		<xs:attribute name="size" type="xs:string"/>
+		<xs:attribute name="interactive" default="no">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="yes"/>
+					<xs:enumeration value="no"/>
+					<xs:enumeration value="optional"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
 	</xs:complexType>
 	<xs:complexType name="datatypeType">
 		<xs:attribute name="id" type="xs:ID" use="required"/>
@@ -116,6 +125,15 @@
 				<xs:restriction base="xs:NMTOKEN">
 					<xs:enumeration value="yes"/>
 					<xs:enumeration value="no"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="interactive">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="yes"/>
+					<xs:enumeration value="no"/>
+					<xs:enumeration value="optional"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>
@@ -229,6 +247,7 @@
 	</xs:complexType>
 	<xs:complexType name="submodelType">
 		<xs:sequence>
+			<xs:element name="description" type="descriptionType" minOccurs="0"/>
 			<xs:element name="timescale" type="timescaleType"/>
 			<xs:element name="spacescale" type="spacescaleType" minOccurs="0" maxOccurs="unbounded"/>
 			<xs:element name="otherscale" type="otherscaleType" minOccurs="0" maxOccurs="unbounded"/>
@@ -249,6 +268,15 @@
 			</xs:simpleType>
 		</xs:attribute>
 		<xs:attribute name="stateful" default="no">
+			<xs:simpleType>
+				<xs:restriction base="xs:NMTOKEN">
+					<xs:enumeration value="yes"/>
+					<xs:enumeration value="no"/>
+					<xs:enumeration value="optional"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="interactive" default="no">
 			<xs:simpleType>
 				<xs:restriction base="xs:NMTOKEN">
 					<xs:enumeration value="yes"/>

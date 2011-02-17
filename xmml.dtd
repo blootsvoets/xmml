@@ -1,53 +1,85 @@
+<!--
+Document Type Definition DTD of the xMML format version 0.1.1, 2011-02-17
+Author: Joris Borgdorff, J.Borgdorff@uva.nl
+For the latest version, consult the MAPPER project Wiki
+-->
+
+<!-- Define reusable attribute entities -->
+
+<!-- A scale, with an optional name, step size and maximum value -->
 <!ENTITY % scale
   "id NMTOKENS #IMPLIED
   delta CDATA #IMPLIED
   max CDATA #IMPLIED">
 
+<!-- A variable scale, with an optional minimum and maximum value. If the type
+     is fixed, then during runtime this value will not vary and must be specified
+     for each submodel instance that uses it. -->
 <!ENTITY % varscale
   "type (variable|fixed) 'variable'
   min CDATA #IMPLIED
   max CDATA #IMPLIED">
 
+<!-- The id, submodel execution loop operator and datatype of a port. Optional
+     type can be used to specify whether it concerns a port that only transfers
+     a state or a regular one.-->
 <!ENTITY % port
   "id NMTOKEN #REQUIRED
   operator (Of|Oi|B|S|finit) #REQUIRED
   datatype IDREF #IMPLIED
   type (state|normal) 'normal'">
 
+<!-- Represent an implemented entity -->
 <!ENTITY % real
   "id ID #REQUIRED
   class CDATA #IMPLIED">
 
+<!-- Define all elements -->
+
+<!-- Root element of a single multiscale model -->
 <!ELEMENT model (description?,definitions,topology)>
 <!ATTLIST model
   id ID #REQUIRED
   xmlns:xi CDATA #IMPLIED
   name CDATA #IMPLIED
   version CDATA #IMPLIED
-  xmml_version CDATA #FIXED "0.1">
+  xmml_version CDATA #FIXED "0.1.1">
 
+<!-- A short textual description of the parent element (model or submodel) -->
 <!ELEMENT description (#PCDATA)>
 <!ATTLIST description>
 
+<!-- Type definitions within the model -->
 <!ELEMENT definitions (datatype*,converter*,submodel+)>
 
+<!-- An implemented datatype. The size_estimate attribute may be a function
+     in terms of the scales and params of the submodel it originated from -->
 <!ELEMENT datatype EMPTY>
 <!ATTLIST datatype
   %real;
   size_estimate CDATA #IMPLIED>
 
+<!-- A converter of the 'from' datatype to the 'to' datatype. -->
 <!ELEMENT converter (requires?)>
 <!ATTLIST converter
   %real;
   from IDREF #REQUIRED
   to IDREF #REQUIRED>
 
+<!-- If a converter requires more than just the given datatype this can be
+		 specified here. By default, such a datatype is assumed to originate from
+		 the receiving submodel -->
 <!ELEMENT requires EMPTY>
 <!ATTLIST requires
   name NMTOKENS #IMPLIED
   datatype IDREF #REQUIRED
   src (from|to) "to">
 
+<!-- Definition of a single code of a single submodel.
+     Attributes state whether the submodel should be
+		 started at initialization if this is ambiguous, whether it is stateful
+		 or not, or that it is optional but may bring some optimalization, and whether
+		 user interaction is required while running the submodel. -->
 <!ELEMENT submodel (description?,timescale,spacescale*,otherscale*,param*,ports,implementation?,extra*)>
 <!ATTLIST submodel
   %real;
@@ -55,8 +87,11 @@
   init (yes|no) "no"
   stateful (yes|no|optional) "no"
   version CDATA #IMPLIED
-	interactive (yes|no) "no">
-  
+	interactive (yes|no|optional) "no">
+
+<!-- Implementation details of the submodel. Runtime should be interpreted as
+     typical runtime on the platforms that are specified. Size is the code
+     size. Language is the programming language that is used. -->
 <!ELEMENT implementation (platform*,library*)>
 <!ATTLIST implementation
   size CDATA #IMPLIED
@@ -65,71 +100,98 @@
   cores NMTOKEN #IMPLIED
   language CDATA #IMPLIED>
 
+<!-- Platforms a submodel can run on, including architecture and operating
+     system. If more than one platforms are listed, a preference can be made. -->
 <!ELEMENT platform EMPTY>
 <!ATTLIST platform
   arch CDATA #IMPLIED
   os CDATA #REQUIRED
   preferred (yes|no) #IMPLIED>
 
+<!-- Libraries that the submodel implementation requires. -->
 <!ELEMENT library EMPTY>
 <!ATTLIST library
 	name CDATA #REQUIRED>
 
+<!-- Scale information of a submodel. This can be static, by
+     specifying it as attributes, or dynamic, by having ranges -->
 <!ELEMENT timescale (delta?,max?)>
 <!ATTLIST timescale %scale;>
 
+<!-- Same as above, but for space. Either all dimensions can be listed separately,
+     or the number of dimensions can be given, using only one tag. -->
 <!ELEMENT spacescale (delta?,max?)>
 <!ATTLIST spacescale
 	%scale;
 	dimensions NMTOKEN #IMPLIED>
 
+<!-- Same as above, but for any dimension that is not time or space. -->
 <!ELEMENT otherscale (delta?,max)>
 <!ATTLIST otherscale
 	%scale;
 	type CDATA #IMPLIED
 	dimensions NMTOKEN #IMPLIED>
 
-<!ELEMENT delta EMPTY>
-<!ATTLIST delta %varscale;>
-
-<!ELEMENT extra ANY>
-
-<!ELEMENT max EMPTY>
-<!ATTLIST max %varscale;>
-
+<!-- Same as above, but for an important quantity that is not a dimension.
+     Useful for specifying the size of a datatype -->
 <!ELEMENT param EMPTY>
 <!ATTLIST param 
   id NMTOKEN #REQUIRED
   value CDATA #REQUIRED>
 
+<!ELEMENT delta EMPTY>
+<!ATTLIST delta %varscale;>
+
+<!ELEMENT max EMPTY>
+<!ATTLIST max %varscale;>
+
+<!-- Any information about a submodel not captured by any of the other tags.
+     If this is used, possibly the information therein can also be included
+     in the official format; if so, please contact me. -->
+<!ELEMENT extra ANY>
+
+<!-- All in and out ports of a submodel.-->
 <!ELEMENT ports (in|out)*>
+<!-- Both in and out ports can be used for multiple data at once, as long
+     as it is described by a single data type. -->
 <!ELEMENT in EMPTY>
 <!ATTLIST in %port;>
 <!ELEMENT out EMPTY>
 <!ATTLIST out %port;>
 
+<!-- The instantiation of submodels and couplings between them -->
 <!ELEMENT topology (instance|coupling)+>
 
+<!-- An instance of a submodel. This instance may override some of the
+     scale information that was supplied in the submodel definition. Also 
+     a domain name may be supply, which can be used to identify single domain
+     interaction -->
 <!ELEMENT instance (timescale?,spacescale*,otherscale*,param*)>
 <!ATTLIST instance
   id ID #IMPLIED
   submodel IDREF #REQUIRED
   domain CDATA #IMPLIED
   init (yes|no) #IMPLIED
-	interactive (yes|no) #IMPLIED
+	interactive (yes|no|optional) #IMPLIED
 	stateful (yes|no|optional) #IMPLIED>
-  
+
+<!-- A coupling from one submodel instance to the other.
+     Notation: instance.outport to otherinstance.inport. Interactive means
+     that the data that is sent through the conduit must be evaluated manually
+     before it can be passed to the next. -->
 <!ELEMENT coupling (filter*)>
 <!ATTLIST coupling
   name CDATA #IMPLIED
   from CDATA #REQUIRED
   to CDATA #REQUIRED
   size CDATA #IMPLIED
-	interactive (yes|no) "no">
+	interactive (yes|no|optional) "no">
 
+<!-- Specify filters that will be applied to the conduit. The order that they
+     are specified in is preserved.-->
 <!ELEMENT filter EMPTY>
 <!ATTLIST filter
 	name CDATA #REQUIRED
-  type (interpolation|reduction) #IMPLIED
+  type (interpolation|reduction|converter) #IMPLIED
 	scale CDATA #IMPLIED
   factor CDATA #IMPLIED>
