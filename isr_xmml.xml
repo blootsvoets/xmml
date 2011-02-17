@@ -1,0 +1,100 @@
+<model id="ISR 2D" name="In-stent restenosis 2D">
+  <description>
+    A model of the process that occurs in the artery after stenting.
+  </description>
+
+	<submodels>
+		<submodel id="INIT" name="Initial cell conditions">
+			<dimension type="time" name="t" step="10 ns" max="100 ms"/>
+			<dimension name="x" step="1.5 nm" max="1.5 mm"/>
+			<dimension name="y" step="1.5 nm" max="1.5 mm"/>
+			
+			<ports>
+				<out id="cells" operator="Of" type="agentLocations"/>
+			</ports>
+			
+			<implementation time="1 min" cores="1" cluster_size="1" memory="20 MB" language="Fortran">
+				<platform machine="x86_64" os="linux"/>
+			</implementation>
+		</submodel>
+		<submodel id="BF" name="Blood flow" class="kernel.flow3d.FlowTestController">
+			<dimension type="time" name="t" step="0.1 ns" max="0.8 s"/>
+			<dimension name="x" step="15 nm" max="1.5 mm"/>
+			<dimension name="y" step="15 nm" max="1.5 mm"/>
+			
+			<ports>
+				<in id="boundary" operator="finit" type="latticeInt"/>
+				<out id="shear_stress" operator="Of" type="latticeDouble"/>
+			</ports>
+
+			<implementation time="1 min" cores="max" cluster_size="1" memory="20 MB" language="C++">
+				<platform machine="vector" os="linux" preferred="yes"/>
+				<platform machine="x86_64" os="linux"/>
+			</implementation>
+		</submodel>
+		<submodel id="SMC" name="Smooth muscle cells" class="kernel.smc.SmoothMuscleCellController">
+			<dimension type="time" name="t" step="1 h" max="32 h"/>
+			<dimension name="x" step="15 nm" max="1.5 mm"/>
+			<dimension name="y" step="15 nm" max="1.5 mm"/>
+			<dimension name="n" step="1" max="30000"/>
+			
+			<ports>
+				<in id="initial_positions" operator="finit" type="agentLocations"/>
+				<in id="shear_stress" operator="C" type="agentDouble"/>
+				<in id="drug_concentration" operator="C" type="agentDouble"/>
+				<out id="agentLocations" operator="Oi" type="agentLocations"/>
+			</ports>
+
+			<implementation time="1 min" cores="1" cluster_size="1" memory="30 MB" language="C++">
+				<platform machine="x86_64" os="linux"/>
+			</implementation>
+		</submodel>
+		<submodel id="DD" name="Drug diffusion">
+			<dimension type="time" name="t" step="1 s" max="30 min"/>
+			<dimension name="x" steps="100" max="1.5 mm"/>
+			<dimension name="y" steps="100" max="1.5 mm"/>
+			<ports>
+				<in id="boundary" operator="finit" type="latticeInt"/>
+				<out id="drug_concentration" operator="Of" type="latticeDouble"/>
+			</ports>
+			
+			<implementation time="1 min" cores="1" cluster_size="1" memory="20 MB" language="Fortran">
+				<platform machine="x86_64" os="linux"/>
+			</implementation>
+		</submodel>
+	</submodels>
+	
+	<couplings>
+		<coupling id="ic2smc" from="INIT.cells" to="SMC.initial_positions"/>
+		<coupling id="smc2bf" from="SMC.agentLocations" to="BF.boundary"/>
+		<coupling id="smc2dd" from="SMC.agentLocations" to="DD.boundary"/>
+		<coupling id="bf2smc" from="BF.shear_stress" to="SMC.shear_stress">
+			<param id="agents" from="SMC.agentLocations"/>
+		</coupling>
+		<coupling id="dd2smc" from="DD.drug_concentration" to="SMC.drug_concentration">
+			<param id="agents" from="SMC.agentLocations"/>
+		</coupling>
+	</couplings>
+	
+	<datatypes>
+		<datatype id="latticeInt" class="datatype.LatticeInt" size="nx*ny*sizeof(int)"/>
+			<param id="nx" default="steps(x)" type="int"/>
+			<param id="ny" default="steps(y)" type="int"/>
+		</datatype>
+		<datatype id="latticeDouble" class="datatype.LatticeDouble" size="nx*ny*sizeof(double)">
+			<param id="nx" default="steps(x)" type="int"/>
+			<param id="ny" default="steps(y)" type="int"/>
+		</datatype>
+		<datatype id="agentLocations" class="datatype.AgentLocations" size="3*n*sizeof(double)"/>
+			<param id="n" default="max(n)" type="int"/>
+		</datatype>
+		<datatype id="agentDouble" class="datatype.AgentPropertyDouble" size="n*sizeof(double)"/>
+			<param id="n" default="max(n)" type="int"/>
+		</datatype>
+
+		<converter id="latticeDouble2agents" from="latticeDouble" to="agentDouble" class="datatype.converter.Latticedouble2agents">
+			<param id="agents" type="agentLocations"/>
+		</converter>
+		<converter id="agents2latticeInt" from="agentLocations" to="latticeInt" class="datatype.converter.Agents2latticeInt"/>
+	</datatypes>
+</model>

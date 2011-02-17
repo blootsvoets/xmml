@@ -1,0 +1,53 @@
+<simulation type="HMM">
+	<components>
+		<component id="macro" submodel="macro" domain="fluid">
+			<!-- strut properties -->
+			<param id="no_of_struts">4</param>
+			<param id="strut_side" unit="mm">0.18</param>
+			<param id="max_deploy" unit="mm">0.09</param> 			<!-- test_hannan -- changing deployment depths -->
+
+			<param id="deploy_max_iter_1">150</param>         <!-- number of iterations to resolve deployment -->
+			<param id="deploy_max_iter_2">1</param>           <!-- number of iterations after deployment -->
+			<param id="deploy_png_iter">1</param>             <!--  png plotting interval -->
+			<param id="deploy_png_quantity">"stress"</param>  <!--  quantity to plot -->
+			<param id="deploy_png_min_value">0.0</param>
+			<param id="deploy_png_max_value">0.01</param>
+
+			<!-- cell properties -->
+		</component>
+		<component id="micro" submodel="micro" domain="fluid" multiplicity="dynamic">
+			<param id="smc_mean_rad" unit="mm">0.0151934</param>
+			<param id="smc_sigm_rad" unit="mm">0.000</param>
+			<param id="ec_mean_rad" unit="mm">0.00426935</param>
+			<param id="ec_sigm_rad" unit="mm">0.000</param>			
+		</component>
+	</components>
+
+  <domains>
+		<domain id="fluid">
+			<!-- bounding box -->
+			<param id="xmin_bb" unit="mm">0.0</param>
+			<param id="ymin_bb" unit="mm">-0.75</param> 
+			<param id="width_bb" unit="mm">1.5</param>
+
+			<!-- discretization -->
+			<param id="xmin" unit="mm">0.0</param>
+			<param id="ymin" unit="mm">-0.62</param>
+			<param id="zmin" unit="mm">0.0</param>
+
+			<param id="kin_viscosity[m2/s]">4E-6</param>
+			<param id="U_max[m/s]">0.121</param>
+			<param id="rho0[kg/m3]">1000</param>
+			<param id="flowdt" unit="s">0.0001</param>
+			<param id="flowdx" unit="mm">0.01</param>
+		</domain>
+	</domains>
+	
+	<connections>
+		<connection coupling="ic2smc" from="init" to="smc"/>
+		<connection coupling="smc2dd" from="smc" to="dd" convert_at="from"/>
+		<connection coupling="smc2bf" from="smc" to="bf" convert_at="from"/>
+		<connection coupling="dd2smc" from="dd" to="smc" convert_at="to"/>
+		<connection coupling="bf2smc" from="bf" to="smc" convert_at="to"/>
+	</connections>
+</model>

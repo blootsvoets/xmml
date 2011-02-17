@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<model id="ISR2D" name="In-stent restenosis 2D" xmlns:xi="http://www.w3.org/2001/XInclude">
+  <description>
+    A model of the process that occurs in the artery after stenting.
+  </description>
+  
+  <definitions>
+    <xi:include href="isr_meta-2010-01-04.xml"/>
+  
+    <submodel id="INIT" name="Initial cell conditions" class="kernel.ic.ICGenerator">
+      <scales>
+        <time delta="1E-3" max="1E-1"/>
+        <space delta="1E-5" max="1E-3"/>
+        <space delta="1E-5" max="1E-3"/>
+      </scales>
+
+      <ports>
+        <out id="cells" operator="Of" datatype="agentLocations"/>
+      </ports>
+    
+      <implementation time="60 s" cores="1" cluster_size="1" memory="20 MB" language="Fortran">
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+  
+    <submodel id="BF" name="Blood flow" environment="blood" class="kernel.flow3d.FlowTestController">
+      <scales>
+        <time delta="1E-7" max="1"/>
+        <space delta="1E-5" max="1E-3"/>
+        <space delta="1E-5" max="1E-3"/>
+      </scales>
+
+      <ports>
+        <in id="boundary" operator="U" datatype="latticeInt"/>
+        <out id="shear_stress" operator="Of" datatype="latticeDouble"/>
+      </ports>
+    
+      <implementation time="1 min" cores="max" cluster_size="1" memory="20 MB" language="C++">
+        <platform machine="vector" os="linux" preferred="yes"/>
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+  
+    <submodel id="SMC" name="Smooth muscle cells" environment="tissue" class="kernel.smc.SmoothMuscleCellController">
+      <scales>
+        <time delta="1E3" max="1E7"/>
+        <space delta="1E-5" max="1E-3"/>
+        <space delta="1E-5" max="1E-3"/>
+      </scales>
+      <param name="n" value="1000"/>
+    
+      <ports>
+        <in id="initial_positions" operator="finit" datatype="agentLocations"/>
+        <in id="shear_stress" operator="C" datatype="agentDouble"/>
+        <in id="drug_concentration" operator="C" datatype="agentDouble"/>
+        <out id="cell_positions" operator="Oi" datatype="agentLocations"/>
+      </ports>
+    
+      <implementation time="1 min" cores="1" cluster_size="1" memory="30 MB" language="C++">
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+  
+    <submodel id="DD" name="Drug diffusion" class="kernel.dd.DrugDiffusion">
+      <scales>
+        <time delta="1E3" max="1E7"/>
+        <space delta="1E-5" max="1E-3"/>
+        <space delta="1E-5" max="1E-3"/>
+      </scales>
+    
+      <ports>
+        <in id="boundary" operator="finit" datatype="latticeInt"/>
+        <out id="drug_concentration" operator="Of" datatype="latticeDouble"/>
+      </ports>
+      <implementation time="1 min" cores="1" cluster_size="1" memory="20 MB" language="Fortran">
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+  </definitions>
+  
+  <topology>
+    <instance id="ic" submodel="INIT" domain="artery"/>
+    <instance id="bf" submodel="BF" domain="artery.blood"/>
+    <instance id="dd" submodel="DD" domain="artery.tissue"/>
+    <instance id="smc" submodel="SMC" domain="artery.tissue"/>
+    
+    <coupling from="ic.cells" to="smc.initial_positions"/>
+    <coupling from="smc.cell_positions" to="dd.boundary"/>
+    <coupling from="smc.cell_positions" to="bf.boundary"/>
+    <coupling from="dd.drug_concentration" to="smc.drug_concentration"/>
+    <coupling from="bf.shear_stress" to="smc.shear_stress"/>
+  </topology>
+</model>

@@ -1,0 +1,135 @@
+<!ENTITY % scale
+  "id NMTOKENS #IMPLIED
+  delta CDATA #IMPLIED
+  max CDATA #IMPLIED">
+
+<!ENTITY % varscale
+  "type (variable|fixed) 'variable'
+  min CDATA #IMPLIED
+  max CDATA #IMPLIED">
+
+<!ENTITY % port
+  "id NMTOKEN #REQUIRED
+  operator (Of|Oi|B|S|finit) #REQUIRED
+  datatype IDREF #IMPLIED
+  type (state|normal) 'normal'">
+
+<!ENTITY % real
+  "id ID #REQUIRED
+  class CDATA #IMPLIED">
+
+<!ELEMENT model (description?,definitions,topology)>
+<!ATTLIST model
+  id ID #REQUIRED
+  xmlns:xi CDATA #IMPLIED
+  name CDATA #IMPLIED
+  version CDATA #IMPLIED
+  xmml_version CDATA #FIXED "0.1">
+
+<!ELEMENT description (#PCDATA)>
+<!ATTLIST description>
+
+<!ELEMENT definitions (datatype*,converter*,submodel+)>
+
+<!ELEMENT datatype EMPTY>
+<!ATTLIST datatype
+  %real;
+  size_estimate CDATA #IMPLIED>
+
+<!ELEMENT converter (requires?)>
+<!ATTLIST converter
+  %real;
+  from IDREF #REQUIRED
+  to IDREF #REQUIRED>
+
+<!ELEMENT requires EMPTY>
+<!ATTLIST requires
+  name NMTOKENS #IMPLIED
+  datatype IDREF #REQUIRED
+  src (from|to) "to">
+
+<!ELEMENT submodel (description?,timescale,spacescale*,otherscale*,param*,ports,implementation?,extra*)>
+<!ATTLIST submodel
+  %real;
+  name CDATA #IMPLIED
+  init (yes|no) "no"
+  stateful (yes|no|optional) "no"
+  version CDATA #IMPLIED
+	interactive (yes|no) "no">
+  
+<!ELEMENT implementation (platform*,library*)>
+<!ATTLIST implementation
+  size CDATA #IMPLIED
+	runtime CDATA #IMPLIED
+  memory CDATA #IMPLIED
+  cores NMTOKEN #IMPLIED
+  language CDATA #IMPLIED>
+
+<!ELEMENT platform EMPTY>
+<!ATTLIST platform
+  arch CDATA #IMPLIED
+  os CDATA #REQUIRED
+  preferred (yes|no) #IMPLIED>
+
+<!ELEMENT library EMPTY>
+<!ATTLIST library
+	name CDATA #REQUIRED>
+
+<!ELEMENT timescale (delta?,max?)>
+<!ATTLIST timescale %scale;>
+
+<!ELEMENT spacescale (delta?,max?)>
+<!ATTLIST spacescale
+	%scale;
+	dimensions NMTOKEN #IMPLIED>
+
+<!ELEMENT otherscale (delta?,max)>
+<!ATTLIST otherscale
+	%scale;
+	type CDATA #IMPLIED
+	dimensions NMTOKEN #IMPLIED>
+
+<!ELEMENT delta EMPTY>
+<!ATTLIST delta %varscale;>
+
+<!ELEMENT extra ANY>
+
+<!ELEMENT max EMPTY>
+<!ATTLIST max %varscale;>
+
+<!ELEMENT param EMPTY>
+<!ATTLIST param 
+  id NMTOKEN #REQUIRED
+  value CDATA #REQUIRED>
+
+<!ELEMENT ports (in|out)*>
+<!ELEMENT in EMPTY>
+<!ATTLIST in %port;>
+<!ELEMENT out EMPTY>
+<!ATTLIST out %port;>
+
+<!ELEMENT topology (instance|coupling)+>
+
+<!ELEMENT instance (timescale?,spacescale*,otherscale*,param*)>
+<!ATTLIST instance
+  id ID #IMPLIED
+  submodel IDREF #REQUIRED
+  domain CDATA #IMPLIED
+  init (yes|no) #IMPLIED
+	interactive (yes|no) #IMPLIED
+	stateful (yes|no|optional) #IMPLIED>
+  
+<!ELEMENT coupling (filter*)>
+<!ATTLIST coupling
+  name CDATA #IMPLIED
+  from CDATA #REQUIRED
+  to CDATA #REQUIRED
+  size CDATA #IMPLIED
+	interactive (yes|no) "no">
+
+<!ELEMENT filter EMPTY>
+<!ATTLIST filter
+	name CDATA #REQUIRED
+  type (interpolation|reduction) #IMPLIED
+	scale CDATA #IMPLIED
+  factor CDATA #IMPLIED>

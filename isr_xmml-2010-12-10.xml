@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<model id="ISR2D" name="In-stent restenosis 2D">
+  <description>
+    A model of the process that occurs in the artery after stenting.
+  </description>
+  
+  <datatypes>
+    <datatype id="latticeInt" class="datatype.LatticeInt" size="nx*ny*sizeof(int)">
+      <param id="nx" default="steps(x)" type="int"/>
+      <param id="ny" default="steps(y)" type="int"/>
+    </datatype>
+    <datatype id="latticeDouble" class="datatype.LatticeDouble" size="nx*ny*sizeof(double)">
+      <param id="nx" default="steps(x)" type="int"/>
+      <param id="ny" default="steps(y)" type="int"/>
+    </datatype>
+    <datatype id="agentLocations" class="datatype.AgentLocations" size="3*n*sizeof(double)">
+      <param id="n" default="property(n)" type="int"/>
+    </datatype>
+    <datatype id="agentDouble" class="datatype.AgentPropertyDouble" size="n*sizeof(double)">
+      <param id="n" default="property(n)" type="int"/>
+    </datatype>
+    <datatype id="latticeMetadata" class="datatype.LatticeMeta" size="2*sizeof(int) + 4*sizeof(double)"/>
+    
+    <converter id="latticeDouble2agents" from="latticeDouble" to="agentDouble" class="datatype.converter.Latticedouble2agents">
+      <param id="agents" datatype="agentLocations" source="to"/>
+    </converter>
+    <converter id="agents2latticeInt" from="agentLocations" to="latticeInt" class="datatype.converter.Agents2latticeInt">
+      <param id="latticeProps" datatype="latticeMetadata" source="to"/>
+    </converter>
+  </datatypes>
+  
+  <environments>
+    <environment id="artery">
+      <environment id="blood"/>
+      <environment id="tissue"/>
+    </environment>
+  </environments>
+  
+  <submodels>
+    <submodel id="INIT" name="Initial cell conditions" environment="artery" class="kernel.ic.ICGenerator">
+      <scale type="time" id="t" delta="-3" max="-1"/>
+      <scale type="space" id="x" delta="-5" max="-3"/>
+      <scale type="space" id="y" delta="-5" max="-3"/>
+      <ports>
+        <out id="cells" operator="Of" datatype="agentLocations"/>
+      </ports>
+      <implementation time="60 s" cores="1" cluster_size="1" memory="20 MB" language="Fortran">
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+    
+    <submodel id="BF" name="Blood flow" environment="blood" class="kernel.flow3d.FlowTestController">
+      <scale type="time" id="t" delta="-7" max="0"/>
+      <scale type="space" id="x" delta="-5" max="-3"/>
+      <scale type="space" id="y" delta="-5" max="-3"/>
+      <ports>
+        <in id="boundary" operator="U" datatype="latticeInt"/>
+        <out id="shear_stress" operator="Of" datatype="latticeDouble"/>
+      </ports>
+      <implementation time="1 min" cores="max" cluster_size="1" memory="20 MB" language="C++">
+        <platform machine="vector" os="linux" preferred="yes"/>
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+    
+    <submodel id="SMC" name="Smooth muscle cells" environment="tissue" class="kernel.smc.SmoothMuscleCellController">
+      <scale type="time" id="t" delta="3" max="7"/>
+      <scale type="space" id="x" delta="-5" max="-3"/>
+      <scale type="space" id="y" delta="-5" max="-3"/>
+      <property id="n" order="4"/>
+      <ports>
+        <in id="initial_positions" operator="finit" datatype="agentLocations"/>
+        <in id="shear_stress" operator="C" datatype="agentDouble"/>
+        <in id="drug_concentration" operator="C" datatype="agentDouble"/>
+        <out id="cell_positions" operator="Oi" datatype="agentLocations"/>
+      </ports>
+      <implementation time="1 min" cores="1" cluster_size="1" memory="30 MB" language="C++">
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+    
+    <submodel id="DD" name="Drug diffusion" environment="tissue" class="kernel.dd.DrugDiffusion">
+      <scale type="time" id="t" delta="3" max="7"/>
+      <scale type="space" id="x" delta="-5" max="-3"/>
+      <scale type="space" id="y" delta="-5" max="-3"/>
+      <ports>
+        <in id="boundary" operator="finit" datatype="latticeInt"/>
+        <out id="drug_concentration" operator="Of" datatype="latticeDouble"/>
+      </ports>
+      <implementation time="1 min" cores="1" cluster_size="1" memory="20 MB" language="Fortran">
+        <platform machine="x86_64" os="linux"/>
+      </implementation>
+    </submodel>
+  </submodels>
+  
+  <couplings>
+    <coupling id="ic2smc" from="INIT.cells" to="SMC.initial_positions"/>
+    <coupling id="smc2bf" from="SMC.cell_positions" to="BF.boundary" converter="agents2latticeInt"/>
+    <coupling id="smc2dd" from="SMC.cell_positions" to="DD.boundary" converter="agents2latticeInt"/>
+    <coupling id="bf2smc" from="BF.shear_stress" to="SMC.shear_stress" converter="latticeDouble2agents"/>
+    <coupling id="dd2smc" from="DD.drug_concentration" to="SMC.drug_concentration" converter="latticeDouble2agents"/>
+  </couplings>
+</model>

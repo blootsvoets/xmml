@@ -1,0 +1,51 @@
+<model id="HMM" name="Hierarchical Multiscale Method">
+  <description>
+    Hierarchical Multiscale Method (HMM).
+  </description>
+
+	<datatypes>
+		<datatype id="doubleProperty" class="datatype.DoubleProperty" size="sizeof(double)"/>
+	</datatypes>
+
+	<environments>
+	  <environment id="fluid">
+	    <param id="bb" type="double" dim="2"/>
+	    <param id="step" type="double" dim="2"/>
+	    <param id="init_viscosity" type="double"/>
+	    <param id="flow" type="double"/>
+	    <environment id="microfluid">
+  	    <param id="bb" type="double" dim="2"/>
+  	    <param id="step" type="double" dim="2"/>
+  	    <param id="num_elem" type="int"/>
+      </environment>
+    </environment>
+  </environments>
+
+	<submodels>
+		<submodel id="macro" name="Macro model" environment="fluid" class="kernel.macro.Macro" >
+			<scale type="time" id="t" delta="-1" max="1"/>
+			<scale id="x" delta="-4" max="-2"/>
+			<scale id="y" delta="-4" max="-2"/>
+			
+			<ports>
+				<in id="viscosity" operator="C" type="doubleProperty" multiplicity="dynamic" match="shear_stress"/>
+				<out id="shear_stress" operator="Oi" type="doubleProperty" multiplicity="dynamic"/>
+			</ports>
+		</submodel>
+		<submodel id="micro" name="Micro model" environment="fluid.microfluid" class="kernel.micro.Micro">
+			<scale type="time" id="t" delta="-3" max="-1"/>
+			<scale id="x" delta="-8" max="-6"/>
+			<scale id="y" delta="-8" max="-6"/>
+			
+			<ports>
+				<in id="shear_stress" operator="finit" type="doubleProperty"/>
+				<out id="viscosity" operator="Of" type="doubleProperty"/>
+			</ports>
+		</submodel>
+	</submodels>
+	
+	<couplings>
+		<coupling id="macro2micro" from="macro.shear_stress" to="micro.shear_stress"/>
+		<coupling id="micro2macro" from="micro.viscosity" to="macro.viscosity"/>
+	</couplings>
+</model>
