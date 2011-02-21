@@ -5,7 +5,8 @@
 
 VERSION=$1
 TAG=v$VERSION
-DIR=release/xmml-$VERSION
+NAME=xmml-$VERSION
+DIR=release/$NAME
 TARDIR=$DIR-tar
 SUCCEED=0
 BRANCH=`git branch | grep \* | sed -e 's/\*//' | sed -e 's/[[:space:]]*//g'`
@@ -38,8 +39,13 @@ fi
 cp CHANGELOG.txt $DIR/CHANGELOG.txt
 cp CHANGELOG.txt $TARDIR/CHANGELOG.txt
 
-tar czf $DIR.tar.gz $TARDIR
-rm -r $TARDIR
+mv $DIR $DIR.tmp
+mv $TARDIR $DIR
+cd release
+tar czf ../$DIR.tar.gz $NAME
+rm -r $NAME
+cd ..
+mv $DIR.tmp $DIR
 
 git checkout -q $BRANCH
 
