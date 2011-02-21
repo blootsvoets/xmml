@@ -67,8 +67,8 @@ For the latest version, consult the MAPPER project Wiki
   to IDREF #REQUIRED>
 
 <!-- If a converter requires more than just the given datatype this can be
-		 specified here. By default, such a datatype is assumed to originate from
-		 the receiving submodel -->
+     specified here. By default, such a datatype is assumed to originate from
+     the receiving submodel -->
 <!ELEMENT requires EMPTY>
 <!ATTLIST requires
   name NMTOKENS #IMPLIED
@@ -77,9 +77,9 @@ For the latest version, consult the MAPPER project Wiki
 
 <!-- Definition of a single code of a single submodel.
      Attributes state whether the submodel should be
-		 started at initialization if this is ambiguous, whether it is stateful
-		 or not, or that it is optional but may bring some optimalization, and whether
-		 user interaction is required while running the submodel. -->
+     started at initialization if this is ambiguous, whether it is stateful
+     or not, or that it is optional but may bring some optimalization, and whether
+     user interaction is required while running the submodel. -->
 <!ELEMENT submodel (description?,timescale,spacescale*,otherscale*,param*,ports,implementation?,extra*)>
 <!ATTLIST submodel
   %real;
