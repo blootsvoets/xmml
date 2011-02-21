@@ -1,0 +1,7 @@
+xMML version 0.1.1
+
+Changes since version 0.1
+* Added an interactive attribute to submodel, instance and coupling
+* Added a stateful attribute to instance
+* Removed version from description
+* Added converter to filter type

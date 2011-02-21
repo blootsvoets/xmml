@@ -47,7 +47,6 @@ For the latest version, consult the MAPPER project Wiki
 
 <!-- A short textual description of the parent element (model or submodel) -->
 <!ELEMENT description (#PCDATA)>
-<!ATTLIST description>
 
 <!-- Type definitions within the model -->
 <!ELEMENT definitions (datatype*,converter*,submodel+)>
@@ -87,7 +86,7 @@ For the latest version, consult the MAPPER project Wiki
   init (yes|no) "no"
   stateful (yes|no|optional) "no"
   version CDATA #IMPLIED
-	interactive (yes|no|optional) "no">
+  interactive (yes|no|optional) "no">
 
 <!-- Implementation details of the submodel. Runtime should be interpreted as
      typical runtime on the platforms that are specified. Size is the code
@@ -95,7 +94,7 @@ For the latest version, consult the MAPPER project Wiki
 <!ELEMENT implementation (platform*,library*)>
 <!ATTLIST implementation
   size CDATA #IMPLIED
-	runtime CDATA #IMPLIED
+  runtime CDATA #IMPLIED
   memory CDATA #IMPLIED
   cores NMTOKEN #IMPLIED
   language CDATA #IMPLIED>
@@ -111,7 +110,7 @@ For the latest version, consult the MAPPER project Wiki
 <!-- Libraries that the submodel implementation requires. -->
 <!ELEMENT library EMPTY>
 <!ATTLIST library
-	name CDATA #REQUIRED>
+  name CDATA #REQUIRED>
 
 <!-- Scale information of a submodel. This can be static, by
      specifying it as attributes, or dynamic, by having ranges -->
@@ -122,15 +121,15 @@ For the latest version, consult the MAPPER project Wiki
      or the number of dimensions can be given, using only one tag. -->
 <!ELEMENT spacescale (delta?,max?)>
 <!ATTLIST spacescale
-	%scale;
-	dimensions NMTOKEN #IMPLIED>
+  %scale;
+  dimensions NMTOKEN #IMPLIED>
 
 <!-- Same as above, but for any dimension that is not time or space. -->
 <!ELEMENT otherscale (delta?,max)>
 <!ATTLIST otherscale
-	%scale;
-	type CDATA #IMPLIED
-	dimensions NMTOKEN #IMPLIED>
+  %scale;
+  type CDATA #IMPLIED
+  dimensions NMTOKEN #IMPLIED>
 
 <!-- Same as above, but for an important quantity that is not a dimension.
      Useful for specifying the size of a datatype -->
@@ -172,8 +171,8 @@ For the latest version, consult the MAPPER project Wiki
   submodel IDREF #REQUIRED
   domain CDATA #IMPLIED
   init (yes|no) #IMPLIED
-	interactive (yes|no|optional) #IMPLIED
-	stateful (yes|no|optional) #IMPLIED>
+  interactive (yes|no|optional) #IMPLIED
+  stateful (yes|no|optional) #IMPLIED>
 
 <!-- A coupling from one submodel instance to the other.
      Notation: instance.outport to otherinstance.inport. Interactive means
@@ -185,13 +184,13 @@ For the latest version, consult the MAPPER project Wiki
   from CDATA #REQUIRED
   to CDATA #REQUIRED
   size CDATA #IMPLIED
-	interactive (yes|no|optional) "no">
+  interactive (yes|no|optional) "no">
 
 <!-- Specify filters that will be applied to the conduit. The order that they
      are specified in is preserved.-->
 <!ELEMENT filter EMPTY>
 <!ATTLIST filter
-	name CDATA #REQUIRED
+  name CDATA #REQUIRED
   type (interpolation|reduction|converter) #IMPLIED
-	scale CDATA #IMPLIED
+  scale CDATA #IMPLIED
   factor CDATA #IMPLIED>
