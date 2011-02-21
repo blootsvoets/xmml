@@ -6,19 +6,31 @@
 VERSION=$1
 TAG=v$VERSION
 DIR=release/$TAG
+SUCCEED=0
 
-git checkout $TAG
+git stash -q
+REV=`git rev-parse HEAD`
+
+git checkout -q $TAG
 mkdir -p release/$TAG
-if [[ `grep $VERSION xmml.dtd | wc -l` ]]; then
+if [[ `grep $VERSION xmml.dtd | wc -l` -gt 0 ]]; then
 	cp xmml.dtd $DIR/xmml-$VERSION.dtd
 else
 	echo "WARNING: xMML Document Type Definition does not match version of Git repository"
+	SUCCEED=1
 fi
 
-if [[ `grep $VERSION xMML.xsd.xml | wc -l` ]]; then
+if [[ `grep $VERSION xMML.xsd.xml | wc -l` -gt 0 ]]; then
 	cp xMML.xsd.xml $DIR/xMML-$VERSION.xsd.xml
 else
 	echo "WARNING: xMML Schema Definition does not match version of Git repository"
+	SUCCEED=1
 fi
 
-git checkout HEAD
+git checkout -q $REV
+git stash pop -q
+
+if [[ $SUCCEED -eq 0 ]]; then
+	echo "Release $VERSION created in directory $DIR"
+fi
+
