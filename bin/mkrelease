@@ -18,6 +18,7 @@ if [[ $? -ne 0 ]]; then
 fi
 
 mkdir -p $DIR
+mkdir -p $TARDIR
 if [[ `grep \"$VERSION\" xmml.dtd | wc -l` -gt 0 ]]; then
 	cp xmml.dtd $DIR/xmml-$VERSION.dtd
 	cp xmml.dtd $TARDIR/xmml.dtd
@@ -35,6 +36,8 @@ else
 fi
 
 cp CHANGELOG.txt $DIR/CHANGELOG.txt
+cp CHANGELOG.txt $TARDIR/CHANGELOG.txt
+
 tar czf $DIR.tar.gz $TARDIR
 rm -r $TARDIR
 
