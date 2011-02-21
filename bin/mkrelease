@@ -5,7 +5,7 @@
 
 VERSION=$1
 TAG=v$VERSION
-DIR=release/$TAG
+DIR=release/xmml-$VERSION
 SUCCEED=0
 BRANCH=`git branch | grep \* | sed -e 's/\*//' | sed -e 's/[[:space:]]*//g'`
 
@@ -16,7 +16,7 @@ if [[ $? -ne 0 ]]; then
   exit
 fi
 
-mkdir -p release/$TAG
+mkdir -p $DIR
 if [[ `grep \"$VERSION\" xmml.dtd | wc -l` -gt 0 ]]; then
 	cp xmml.dtd $DIR/xmml-$VERSION.dtd
 else
@@ -30,6 +30,9 @@ else
 	echo "WARNING: xMML Schema Definition does not match version of Git repository"
 	SUCCEED=1
 fi
+
+cp CHANGELOG.txt $DIR/CHANGELOG.txt
+tar czf $DIR.tar.gz $DIR
 
 git checkout -q $BRANCH
 
