@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE model SYSTEM "xmml.dtd">
-<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.1" xmlns:xi="http://www.w3.org/2001/XInclude">
+<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.1.1" xmlns:xi="http://www.w3.org/2001/XInclude">
   <description>
     A model of the process that occurs in the artery after stenting.
   </description>
