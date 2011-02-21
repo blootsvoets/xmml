@@ -6,6 +6,7 @@
 VERSION=$1
 TAG=v$VERSION
 DIR=release/xmml-$VERSION
+TARDIR=$DIR-tar
 SUCCEED=0
 BRANCH=`git branch | grep \* | sed -e 's/\*//' | sed -e 's/[[:space:]]*//g'`
 
@@ -19,20 +20,23 @@ fi
 mkdir -p $DIR
 if [[ `grep \"$VERSION\" xmml.dtd | wc -l` -gt 0 ]]; then
 	cp xmml.dtd $DIR/xmml-$VERSION.dtd
+	cp xmml.dtd $TARDIR/xmml.dtd
 else
 	echo "WARNING: xMML Document Type Definition does not match version of Git repository"
 	SUCCEED=1
 fi
 
 if [[ `grep \"$VERSION\" xMML.xsd.xml | wc -l` -gt 0 ]]; then
-	cp xMML.xsd.xml $DIR/xMML-$VERSION.xsd.xml
+	cp xMML.xsd.xml $DIR/xMML-$VERSION.xsd
+	cp xMML.xsd.xml $TARDIR/xMML.xsd
 else
 	echo "WARNING: xMML Schema Definition does not match version of Git repository"
 	SUCCEED=1
 fi
 
 cp CHANGELOG.txt $DIR/CHANGELOG.txt
-tar czf $DIR.tar.gz $DIR
+tar czf $DIR.tar.gz $TARDIR
+rm -r $TARDIR
 
 git checkout -q $BRANCH
 
