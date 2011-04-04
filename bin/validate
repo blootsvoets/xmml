@@ -1,0 +1,3 @@
+#!/bin/bash
+# call: validate XML_IN XMML_OUT
+xmllint --xinclude --postvalid $1 > $2
