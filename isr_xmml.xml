@@ -1,12 +1,35 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE model SYSTEM "xmml.dtd">
-<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.1.1" xmlns:xi="http://www.w3.org/2001/XInclude">
+<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.2" xmlns:xi="http://www.w3.org/2001/XInclude">
   <description>
     A model of the process that occurs in the artery after stenting.
   </description>
   
   <definitions>
     <xi:include href="isr_meta.xml#xpointer(/metadata/*)"/>
+
+    <junction id="agents2lattice" type="fan-out">
+        <ports>
+          <in id="cell_info" datatype="agentFull"/>
+          <out id="latticeBF" datatype="latticeInt"/>
+          <out id="latticeDD" datatype="latticeInt"/>
+          <out id="cell_positions" datatype="agentLocations"/>
+        </ports>
+    </junction>
+    <junction id="latticeBF2agents" type="fan-in">
+        <ports>
+          <in id="cell_positions" datatype="agentLocations"/>
+          <in id="latticeBF" datatype="latticeDouble"/>
+          <out id="cell_dd" datatype="agentDouble"/>
+        </ports>
+    </junction>
+    <junction id="latticeDD2agents" type="fan-in">
+        <ports>
+          <in id="cell_positions" datatype="agentLocations"/>
+          <in id="latticeDD" datatype="latticeDouble"/>
+          <out id="cell_bf" datatype="agentDouble"/>
+        </ports>
+    </junction>
   
     <submodel id="INIT" name="Initial cell conditions">
       <timescale delta="1E-3" max="1E-1"/>
@@ -25,7 +48,7 @@
 
       <ports>
         <in id="state_start" operator="finit" type="state"/>
-        <in id="boundary" operator="S" datatype="latticeInt"/>
+        <in id="boundary" operator="finit" datatype="latticeInt"/>
         <out id="shear_stress" operator="Of" datatype="latticeDouble"/>
         <out id="state_end" operator="Of" type="state"/>
       </ports>
@@ -41,7 +64,7 @@
         <in id="initial_positions" operator="finit" datatype="agentLocations"/>
         <in id="shear_stress" operator="S" datatype="agentDouble"/>
         <in id="drug_concentration" operator="S" datatype="agentDouble"/>
-        <out id="cell_positions" operator="Oi" datatype="agentLocations"/>
+        <out id="cell_positions" operator="Oi" datatype="agentFull"/>
       </ports>
     </submodel>
   
@@ -62,11 +85,20 @@
     <instance id="bf" submodel="BF" domain="artery.blood"/>
     <instance id="dd" submodel="DD" domain="artery.tissue"/>
     <instance id="smc" submodel="SMC" domain="artery.tissue"/>
+
+    <mapper junction="latticeDD2agents" domain="artery.tissue"/>
+    <mapper junction="latticeBF2agents" domain="artery"/>
+    <mapper junction="agents2lattice" domain="artery"/>
     
     <coupling from="ic.cells" to="smc.initial_positions"/>
-    <coupling from="smc.cell_positions" to="dd.boundary"/>
-    <coupling from="smc.cell_positions" to="bf.boundary"/>
-    <coupling from="dd.drug_concentration" to="smc.drug_concentration"/>
-    <coupling from="bf.shear_stress" to="smc.shear_stress"/>
+    <coupling from="smc.cell_positions" to="agents2lattice.cell_info"/>
+    <coupling from="agents2lattice.latticeBF" to="bf.boundary"/>
+    <coupling from="agents2lattice.latticeDD" to="dd.boundary"/>
+    <coupling from="agents2lattice.cell_positions" to="latticeDD2agents.cell_positions"/>
+    <coupling from="agents2lattice.cell_positions" to="latticeBF2agents.cell_positions"/>
+    <coupling from="dd.drug_concentration" to="latticeDD2agents.latticeDD"/>
+    <coupling from="latticeDD2agents.cell_dd" to="smc.drug_concentration"/>
+    <coupling from="bf.shear_stress" to="latticeBF2agents.latticeBF"/>
+    <coupling from="latticeBF2agents.cell_bf" to="smc.drug_concentration"/>
   </topology>
 </model>

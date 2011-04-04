@@ -2,17 +2,12 @@
 <metadata>
   <datatype id="latticeInt" size_estimate="x*y*sizeof(int)"/>
   <datatype id="latticeDouble" size_estimate="x*y*sizeof(double)"/>
-  <datatype id="agentLocations" size_estimate="3*n*sizeof(int)"/>
+  <datatype id="agentLocations" size_estimate="4*n*sizeof(double)"/>
   <datatype id="agentDouble" size_estimate="n*sizeof(double)"/>
-  <datatype id="latticeMetadata" size_estimate="sizeof(double)"/>
+  <datatype id="agentFull" size_estimate="4*n*sizeof(double)+n*sizeof(double)"/>
+  <datatype id="latticeMetadata" size_estimate="2*sizeof(int)+4*sizeof(double)"/>
   <datatype id="double" size_estimate="sizeof(double)"/>
   
-  <converter id="latticeDouble2agents"
-    from="latticeDouble" to="agentDouble">
-    <requires name="agents" datatype="agentLocations" src="to"/>
-  </converter>
-  <converter id="agents2latticeInt"
-    from="agentLocations" to="latticeInt">
-    <requires name="latticeProps" datatype="latticeMetadata" src="to"/>
-  </converter>
+  <converter id="latticeDouble2agents" from="latticeDouble" to="agentDouble"/>
+  <converter id="agents2latticeInt" from="agentLocations" to="latticeInt"/>
 </metadata>
