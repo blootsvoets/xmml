@@ -1,4 +1,15 @@
-xMML version 0.1.1
+xMML version 0.2
+
+Changes since version 0.1.1
+* Added a junction element in definitions, describing a generic
+  fan-in or fan-out junction
+* Added a mapper element in topology, instantiating a junction
+* Added a multiplicity attribute to the instance element, allowing
+  a static number of instances to be created, which can be accessed
+  through mappers.
+* A converter may not have requirements anymore; a fan-in junction
+  mapper can be used instead.
+* Filter type has become mandatory
 
 Changes since version 0.1
 * Added an interactive attribute to submodel, instance and coupling
