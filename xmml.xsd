@@ -1,0 +1,430 @@
+<schema
+  xmlns='http://www.w3.org/2000/10/XMLSchema'
+  targetNamespace='http://www.w3.org/namespace/'
+  xmlns:t='http://www.w3.org/namespace/'>
+
+ <element name='model'>
+  <complexType>
+   <sequence>
+    <element ref='t:description' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:definitions'/>
+    <element ref='t:topology'/>
+   </sequence>
+   <attribute name='id' type='ID' use='required'/>
+   <attribute name='xmlns:xi' type='string' use='optional'/>
+   <attribute name='name' type='string' use='optional'/>
+   <attribute name='version' type='string' use='optional'/>
+   <attribute name='xmml_version' type='string' use='fixed' value='0.2'/>
+  </complexType>
+ </element>
+
+ <element name='description'>
+  <complexType mixed='true'>
+  </complexType>
+ </element>
+
+ <element name='definitions'>
+  <complexType>
+   <sequence>
+    <element ref='t:datatype' minOccurs='0' maxOccurs='unbounded'/>
+    <choice maxOccurs='unbounded'>
+     <element ref='t:converter'/>
+     <element ref='t:junction'/>
+     <element ref='t:submodel'/>
+    </choice>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='datatype'>
+  <complexType>
+   <attribute name='id' type='ID' use='required'/>
+   <attribute name='class' type='string' use='optional'/>
+   <attribute name='size_estimate' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='converter'>
+  <complexType>
+   <attribute name='id' type='ID' use='required'/>
+   <attribute name='class' type='string' use='optional'/>
+   <attribute name='from' type='IDREF' use='required'/>
+   <attribute name='to' type='IDREF' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='junction'>
+  <complexType>
+   <sequence>
+    <element ref='t:ports'/>
+    <element ref='t:implementation' minOccurs='0' maxOccurs='1'/>
+   </sequence>
+   <attribute name='id' type='ID' use='required'/>
+   <attribute name='class' type='string' use='optional'/>
+   <attribute name='init' use='default' value='no'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='type' use='required'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='fan-in'/>
+      <enumeration value='fan-out'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='interactive' use='default' value='no'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+      <enumeration value='optional'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='submodel'>
+  <complexType>
+   <sequence>
+    <element ref='t:description' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:timescale'/>
+    <element ref='t:spacescale' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:otherscale' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:param' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:ports'/>
+    <element ref='t:implementation' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:extra' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+   <attribute name='id' type='ID' use='required'/>
+   <attribute name='class' type='string' use='optional'/>
+   <attribute name='name' type='string' use='optional'/>
+   <attribute name='init' use='default' value='no'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='stateful' use='default' value='no'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+      <enumeration value='optional'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='version' type='string' use='optional'/>
+   <attribute name='interactive' use='default' value='no'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+      <enumeration value='optional'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='implementation'>
+  <complexType>
+   <sequence>
+    <element ref='t:platform' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:library' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+   <attribute name='size' type='string' use='optional'/>
+   <attribute name='runtime' type='string' use='optional'/>
+   <attribute name='memory' type='string' use='optional'/>
+   <attribute name='cores' type='NMTOKEN' use='optional'/>
+   <attribute name='language' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='platform'>
+  <complexType>
+   <attribute name='arch' type='string' use='optional'/>
+   <attribute name='os' type='string' use='required'/>
+   <attribute name='preferred' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='library'>
+  <complexType>
+   <attribute name='name' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='timescale'>
+  <complexType>
+   <sequence>
+    <element ref='t:delta' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:max' minOccurs='0' maxOccurs='1'/>
+   </sequence>
+   <attribute name='id' type='NMTOKENS' use='optional'/>
+   <attribute name='delta' type='string' use='optional'/>
+   <attribute name='max' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='spacescale'>
+  <complexType>
+   <sequence>
+    <element ref='t:delta' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:max' minOccurs='0' maxOccurs='1'/>
+   </sequence>
+   <attribute name='id' type='NMTOKENS' use='optional'/>
+   <attribute name='delta' type='string' use='optional'/>
+   <attribute name='max' type='string' use='optional'/>
+   <attribute name='dimensions' type='NMTOKEN' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='otherscale'>
+  <complexType>
+   <sequence>
+    <element ref='t:delta' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:max'/>
+   </sequence>
+   <attribute name='id' type='NMTOKENS' use='optional'/>
+   <attribute name='delta' type='string' use='optional'/>
+   <attribute name='max' type='string' use='optional'/>
+   <attribute name='type' type='string' use='optional'/>
+   <attribute name='dimensions' type='NMTOKEN' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='param'>
+  <complexType>
+   <attribute name='id' type='NMTOKEN' use='required'/>
+   <attribute name='value' type='string' use='required'/>
+  </complexType>
+ </element>
+
+ <element name='delta'>
+  <complexType>
+   <attribute name='type' use='default' value='variable'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='variable'/>
+      <enumeration value='fixed'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='min' type='string' use='optional'/>
+   <attribute name='max' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='max'>
+  <complexType>
+   <attribute name='type' use='default' value='variable'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='variable'/>
+      <enumeration value='fixed'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='min' type='string' use='optional'/>
+   <attribute name='max' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='extra'>
+  <complexType>
+   <sequence>
+   <any namespace='http://www.w3.org/namespace/'/>
+   </sequence>
+  </complexType>
+ </element>
+
+ <element name='ports'>
+  <complexType>
+   <choice minOccurs='0' maxOccurs='unbounded'>
+    <element ref='t:in'/>
+    <element ref='t:out'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='in'>
+  <complexType>
+   <attribute name='id' type='NMTOKEN' use='required'/>
+   <attribute name='operator' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='Of'/>
+      <enumeration value='Oi'/>
+      <enumeration value='B'/>
+      <enumeration value='S'/>
+      <enumeration value='finit'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='datatype' type='IDREF' use='optional'/>
+   <attribute name='type' use='default' value='normal'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='state'/>
+      <enumeration value='normal'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='out'>
+  <complexType>
+   <attribute name='id' type='NMTOKEN' use='required'/>
+   <attribute name='operator' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='Of'/>
+      <enumeration value='Oi'/>
+      <enumeration value='B'/>
+      <enumeration value='S'/>
+      <enumeration value='finit'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='datatype' type='IDREF' use='optional'/>
+   <attribute name='type' use='default' value='normal'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='state'/>
+      <enumeration value='normal'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='topology'>
+  <complexType>
+   <choice maxOccurs='unbounded'>
+    <element ref='t:instance'/>
+    <element ref='t:coupling'/>
+    <element ref='t:mapper'/>
+   </choice>
+  </complexType>
+ </element>
+
+ <element name='instance'>
+  <complexType>
+   <sequence>
+    <element ref='t:timescale' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:spacescale' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:otherscale' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:param' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+   <attribute name='id' type='ID' use='optional'/>
+   <attribute name='submodel' type='IDREF' use='required'/>
+   <attribute name='domain' type='string' use='optional'/>
+   <attribute name='init' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='interactive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+      <enumeration value='optional'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='stateful' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+      <enumeration value='optional'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='multiplicity' type='NMTOKEN' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='mapper'>
+  <complexType>
+   <attribute name='id' type='ID' use='optional'/>
+   <attribute name='junction' type='IDREF' use='required'/>
+   <attribute name='domain' type='string' use='optional'/>
+   <attribute name='interactive' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+      <enumeration value='optional'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='init' use='optional'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='coupling'>
+  <complexType>
+   <sequence>
+    <element ref='t:filter' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+   <attribute name='name' type='string' use='optional'/>
+   <attribute name='from' type='string' use='required'/>
+   <attribute name='to' type='string' use='required'/>
+   <attribute name='size' type='string' use='optional'/>
+   <attribute name='interactive' use='default' value='no'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='yes'/>
+      <enumeration value='no'/>
+      <enumeration value='optional'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+  </complexType>
+ </element>
+
+ <element name='filter'>
+  <complexType>
+   <attribute name='name' type='string' use='required'/>
+   <attribute name='type' use='required'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='interpolation'/>
+      <enumeration value='reduction'/>
+      <enumeration value='converter'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='scale' type='string' use='optional'/>
+   <attribute name='factor' type='string' use='optional'/>
+  </complexType>
+ </element>
+</schema>
