@@ -60,7 +60,7 @@ For the latest version, consult the MAPPER project Wiki
   size_estimate CDATA #IMPLIED>
 
 <!-- A converter of the 'from' datatype to the 'to' datatype. -->
-<!ELEMENT converter EMPTY>
+<!ELEMENT converter (implementation?)>
 <!ATTLIST converter
   %real;
   from IDREF #REQUIRED
