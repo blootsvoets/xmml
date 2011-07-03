@@ -10,7 +10,8 @@ For the latest version, consult the MAPPER project Wiki
 <!ENTITY % scale
   "id NMTOKENS #IMPLIED
   delta CDATA #IMPLIED
-  max CDATA #IMPLIED">
+  max CDATA #IMPLIED
+  characteristic CDATA #IMPLIED">
 
 <!-- A variable scale, with an optional minimum and maximum value. If the type
      is fixed, then during runtime this value will not vary and must be specified
