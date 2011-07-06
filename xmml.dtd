@@ -34,7 +34,8 @@ For the latest version, consult the MAPPER project Wiki
 <!-- Represent an implemented entity -->
 <!ENTITY % real
   "id ID #REQUIRED
-  class CDATA #IMPLIED">
+  class CDATA #IMPLIED
+  lang CDATA #IMPLIED">
 
 <!-- Define all elements -->
 
@@ -45,13 +46,13 @@ For the latest version, consult the MAPPER project Wiki
   xmlns:xi CDATA #IMPLIED
   name CDATA #IMPLIED
   version CDATA #IMPLIED
-  xmml_version CDATA #FIXED "0.2">
+  xmml_version CDATA #FIXED "0.3">
 
 <!-- A short textual description of the parent element (model or submodel) -->
 <!ELEMENT description (#PCDATA)>
 
 <!-- Type definitions within the model -->
-<!ELEMENT definitions (datatype*,(converter|junction|submodel)+)>
+<!ELEMENT definitions (datatype*,(filter|mapper|submodel)+)>
 
 <!-- An implemented datatype. The size_estimate attribute may be a function
      in terms of the scales and params of the submodel it originated from -->
@@ -60,22 +61,27 @@ For the latest version, consult the MAPPER project Wiki
   %real;
   size_estimate CDATA #IMPLIED>
 
-<!-- A converter of the 'from' datatype to the 'to' datatype. -->
-<!ELEMENT converter EMPTY>
-<!ATTLIST converter
+<!-- A conduit filter, filtering a type of data and either converting
+     it to another type of data, or reducing the data over a dimension
+     with a certain factor, or interpolating in that dimension. -->
+<!ELEMENT filter EMPTY>
+<!ATTLIST filter
   %real;
-  from IDREF #REQUIRED
-  to IDREF #REQUIRED>
+  datatype_in IDREF #IMPLIED
+  datatype_out IDREF #IMPLIED
+  type (interpolation|reduction|converter) #REQUIRED
+  dimension CDATA #IMPLIED
+  factor CDATA #IMPLIED>
 
-<!-- A junction, to be implemented by a mapper. If the type is fan-in, it may
+<!-- A fan-in or fan-out mapper. If the type is fan-in, it may
      have multiple in ports and one out port,
      otherwise, one in port and multiple out ports. Implementation details may
      also be relevant. A fan-in junction may have the same in port used 
      for a submodel instance with a multiplicity, and conversely for the fan-out
-     junction. A converter with multiple inputs can be constructed as a fan-in
+     junction. A filter with multiple inputs can be constructed as a fan-in
      junction. In and out ports may not have an operator specified. -->
-<!ELEMENT junction (ports,implementation?)>
-<!ATTLIST junction 
+<!ELEMENT mapper (ports,implementation?)>
+<!ATTLIST mapper 
   %real;
   init (yes|no) "no"
   type (fan-in|fan-out) #REQUIRED
