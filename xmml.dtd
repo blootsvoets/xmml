@@ -1,5 +1,5 @@
 <!--
-Document Type Definition DTD of the xMML format version 0.2, 2011-04-04
+Document Type Definition DTD of the xMML format version 0.3, 2011-07-06
 Author: Joris Borgdorff, J.Borgdorff@uva.nl
 For the latest version, consult the MAPPER project Wiki
 -->
@@ -14,15 +14,15 @@ For the latest version, consult the MAPPER project Wiki
   characteristic CDATA #IMPLIED">
 
 <!-- A variable scale, with an optional minimum and maximum value. If the type
-     is fixed, then during runtime this value will not vary and must be specified
-     for each submodel instance that uses it. -->
+     is fixed, then during runtime this value will not vary and must be
+     specified for each submodel instance that uses it. -->
 <!ENTITY % varscale
   "type (variable|fixed) 'variable'
   min CDATA #IMPLIED
   max CDATA #IMPLIED">
 
 <!-- The id, submodel execution loop operator and datatype of a port. If it
-     concerns the port of a junction, an operator should not be specified. The 
+     concerns the port of a mapper, an operator should not be specified. The 
      optional type can be used to specify whether it concerns a port that only
      transfers a state or a regular one. -->
 <!ENTITY % port
@@ -34,8 +34,7 @@ For the latest version, consult the MAPPER project Wiki
 <!-- Represent an implemented entity -->
 <!ENTITY % real
   "id ID #REQUIRED
-  class CDATA #IMPLIED
-  lang CDATA #IMPLIED">
+  class CDATA #IMPLIED">
 
 <!-- Define all elements -->
 
@@ -61,10 +60,10 @@ For the latest version, consult the MAPPER project Wiki
   %real;
   size_estimate CDATA #IMPLIED>
 
-<!-- A conduit filter, filtering a type of data and either converting
-     it to another type of data, or reducing the data over a dimension
-     with a certain factor, or interpolating in that dimension. -->
-<!ELEMENT filter EMPTY>
+<!-- A conduit filter, filtering a type of data and either converting it to
+     another type of data, or reducing the data over a dimension with a
+     certain factor, or interpolating in that dimension. -->
+<!ELEMENT filter (description?,implementation?)>
 <!ATTLIST filter
   %real;
   datatype_in IDREF #IMPLIED
@@ -73,14 +72,14 @@ For the latest version, consult the MAPPER project Wiki
   dimension CDATA #IMPLIED
   factor CDATA #IMPLIED>
 
-<!-- A fan-in or fan-out mapper. If the type is fan-in, it may
-     have multiple in ports and one out port,
-     otherwise, one in port and multiple out ports. Implementation details may
-     also be relevant. A fan-in junction may have the same in port used 
-     for a submodel instance with a multiplicity, and conversely for the fan-out
-     junction. A filter with multiple inputs can be constructed as a fan-in
-     junction. In and out ports may not have an operator specified. -->
-<!ELEMENT mapper (ports,implementation?)>
+<!-- A fan-in or fan-out mapper. If the type is fan-in, it may have multiple
+     in ports and one out port, otherwise, one in port and multiple out ports.
+     Implementation details may also be relevant. A fan-in mapper may have
+     the same in port used for a submodel instance with a multiplicity, and
+     conversely for the fan-out mapper. A filter with multiple inputs can be
+     constructed as a fan-in mapper. In and out ports may not have an operator
+     specified. -->
+<!ELEMENT mapper (description?,ports,implementation?,extra*)>
 <!ATTLIST mapper 
   %real;
   init (yes|no) "no"
@@ -90,8 +89,8 @@ For the latest version, consult the MAPPER project Wiki
 <!-- Definition of a single code of a single submodel. Attributes state whether
      the submodel should be started at initialization if this is ambiguous,
      whether it is stateful or not, or that it is optional but may bring some
-     optimalization, and whether user interaction is required while running the
-     submodel. -->
+     optimization, and whether user interaction is required while running
+     the submodel. -->
 <!ELEMENT submodel (description?,timescale,spacescale*,otherscale*,param*,ports,implementation?,extra*)>
 <!ATTLIST submodel
   %real;
@@ -125,13 +124,13 @@ For the latest version, consult the MAPPER project Wiki
 <!ATTLIST library
   name CDATA #REQUIRED>
 
-<!-- Scale information of a submodel. This can be static, by
-     specifying it as attributes, or dynamic, by having ranges -->
+<!-- Scale information of a submodel. This can be static, by specifying it as
+     attributes, or dynamic, by having ranges -->
 <!ELEMENT timescale (delta?,max?)>
 <!ATTLIST timescale %scale;>
 
-<!-- Same as above, but for space. Either all dimensions can be listed separately,
-     or the number of dimensions can be given, using only one tag. -->
+<!-- Same as above, but for space. Either all dimensions can be listed
+     separately, or the number of dimensions can be given, using only one tag. -->
 <!ELEMENT spacescale (delta?,max?)>
 <!ATTLIST spacescale
   %scale;
@@ -145,7 +144,9 @@ For the latest version, consult the MAPPER project Wiki
   dimensions NMTOKEN #IMPLIED>
 
 <!-- Same as above, but for an important quantity that is not a dimension.
-     Useful for specifying the size of a datatype -->
+     Useful for specifying the size of a datatype, or stating a fundamental
+     non-variable fact. It is not meant for completely parameterizing a
+     submodel, since this should be done at time of execution. -->
 <!ELEMENT param EMPTY>
 <!ATTLIST param 
   id NMTOKEN #REQUIRED
@@ -164,50 +165,42 @@ For the latest version, consult the MAPPER project Wiki
 
 <!-- All in and out ports of a submodel.-->
 <!ELEMENT ports (in|out)*>
-<!-- Both in and out ports can be used for multiple data at once, as long
-     as it is described by a single data type. -->
+<!-- Both in and out ports can be used to send composite data, as long
+     as they are described by a single data type. -->
 <!ELEMENT in EMPTY>
 <!ATTLIST in %port;>
 <!ELEMENT out EMPTY>
 <!ATTLIST out %port;>
 
 <!-- The instantiation of submodels and couplings between them -->
-<!ELEMENT topology (instance|coupling|mapper)+>
+<!ELEMENT topology (instance|coupling)+>
 
-<!-- An instance of a submodel, by default using the same id as the submodel.
-     This instance may override some of the
-     scale information that was supplied in the submodel definition. Also 
-     a domain name may be supply, which can be used to identify single domain
-     interaction. A multiplicity is a number that specifies how many instances
-     should be created. If this argument is used and not 1, it should be
-     connected using mappers. Alternatively, different instances can be 
-     addressed using array notation, for instance: instanceA[0].-->
-<!ELEMENT instance (timescale?,spacescale*,otherscale*,param*)>
+<!-- An instance of a submodel or mapper, by default using the same id as the
+     submodel. A submodel instance may override some of the scale information
+     that was supplied in the submodel definition. Also a domain name may be
+     supplied, which can be used to identify single domain interaction. A
+     multiplicity is a number that specifies how many instances should be
+     created. If this argument is used and not 1, it should be connected
+     using mappers. Alternatively, different instances can be addressed using
+     array notation, for instance: instanceA[0]. Mappers may not specify a
+     multiplicity or be stateful. -->
+<!ELEMENT instance (timescale?,spacescale*,otherscale*,param*,extra*)>
 <!ATTLIST instance
   id ID #IMPLIED
-  submodel IDREF #REQUIRED
+  submodel IDREF #IMPLIED
+  mapper IDREF #IMPLIED
   domain CDATA #IMPLIED
   init (yes|no) #IMPLIED
   interactive (yes|no|optional) #IMPLIED
   stateful (yes|no|optional) #IMPLIED
   multiplicity NMTOKEN #IMPLIED>
-
-<!-- A mapper of a certain junction type, by default using the same id as
-     that junction. -->
-<!ELEMENT mapper EMPTY>
-<!ATTLIST mapper
-  id ID #IMPLIED
-  junction IDREF #REQUIRED
-  domain CDATA #IMPLIED
-  interactive (yes|no|optional) #IMPLIED
-  init (yes|no) #IMPLIED>
   
 <!-- A coupling from one submodel instance or mapper to the other.
-     Notation: element1.outport to element2.inport. Interactive means
+     Notation: instance1.outport to instance2.inport. Interactive means
      that the data that is sent through the conduit must be evaluated manually
      before it can be passed to the next. Size can be specified if not already
      done in the datatypes. -->
-<!ELEMENT coupling (filter*)>
+<!ELEMENT coupling (apply*,extra*)>
 <!ATTLIST coupling
   name CDATA #IMPLIED
   from CDATA #REQUIRED
@@ -217,9 +210,7 @@ For the latest version, consult the MAPPER project Wiki
 
 <!-- Specify filters that will be applied to the conduit. The order that they
      are specified in is preserved. -->
-<!ELEMENT filter EMPTY>
-<!ATTLIST filter
-  name CDATA #REQUIRED
-  type (interpolation|reduction|converter) #REQUIRED
-  scale CDATA #IMPLIED
+<!ELEMENT apply (param*,extra*)>
+<!ATTLIST apply
+  filter IDREF #REQUIRED
   factor CDATA #IMPLIED>
