@@ -33,7 +33,6 @@ if [[ `grep \'$VERSION\' xmml.xsd | wc -l` -gt 0 ]]; then
 	cp xmml.xsd $TARDIR/xmml.xsd
 else
 	echo "WARNING: xMML Schema Definition does not match version of Git repository"
-    echo `grep \"$VERSION\" xmml.xsd | wc -l`
 	SUCCEED=1
 fi
 
