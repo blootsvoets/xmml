@@ -12,7 +12,7 @@ Changes since version 0.2
   not captured by other tags.
 * Added a optional version to each computational element
 
-Changes since version 0.1.1
+Changes since version 0.1.2
 * Added a junction element in definitions, describing a generic
   fan-in or fan-out junction
 * Added a mapper element in topology, instantiating a junction
@@ -25,6 +25,9 @@ Changes since version 0.1.1
 * Added a possible characteristic scale
 * Added a release, validation and dtd2xsd conversion script
   to the bin directory
+
+Changes since version 0.1.1
+* Fixed version numbers in examples
 
 Changes since version 0.1
 * Added an interactive attribute to submodel, instance and coupling
