@@ -1,10 +1,13 @@
 <!--
-Document Type Definition DTD of the xMML format version 0.3, 2011-07-06
+Document Type Definition DTD of the xMML format version 0.3, 2011-07-07
 Author: Joris Borgdorff, J.Borgdorff@uva.nl
 For the latest version, consult the MAPPER project Wiki
 -->
 
-<!-- Define reusable attribute entities -->
+<!--
+Define reusable attribute entities
+==================================
+-->
 
 <!-- A scale, with an optional name, step size and maximum value -->
 <!ENTITY % scale
@@ -34,9 +37,13 @@ For the latest version, consult the MAPPER project Wiki
 <!-- Represent an implemented entity -->
 <!ENTITY % real
   "id ID #REQUIRED
-  class CDATA #IMPLIED">
+  class CDATA #IMPLIED
+  version CDATA #IMPLIED">
 
-<!-- Define all elements -->
+<!--
+Define all elements
+===================
+-->
 
 <!-- Root element of a single multiscale model -->
 <!ELEMENT model (description?,definitions,topology)>
@@ -63,7 +70,7 @@ For the latest version, consult the MAPPER project Wiki
 <!-- A conduit filter, filtering a type of data and either converting it to
      another type of data, or reducing the data over a dimension with a
      certain factor, or interpolating in that dimension. -->
-<!ELEMENT filter (description?,implementation?)>
+<!ELEMENT filter (description?,implementation?,extra*)>
 <!ATTLIST filter
   %real;
   datatype_in IDREF #IMPLIED
@@ -97,7 +104,6 @@ For the latest version, consult the MAPPER project Wiki
   name CDATA #IMPLIED
   init (yes|no) "no"
   stateful (yes|no|optional) "no"
-  version CDATA #IMPLIED
   interactive (yes|no|optional) "no">
 
 <!-- Implementation details of the submodel. Runtime should be interpreted as
@@ -209,7 +215,8 @@ For the latest version, consult the MAPPER project Wiki
   interactive (yes|no|optional) "no">
 
 <!-- Specify filters that will be applied to the conduit. The order that they
-     are specified in is preserved. -->
+     are specified in is preserved. The factor, belonging to the filter,
+     can be overridden. -->
 <!ELEMENT apply (param*,extra*)>
 <!ATTLIST apply
   filter IDREF #REQUIRED
