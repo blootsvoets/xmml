@@ -1,5 +1,5 @@
 <!--
-Document Type Definition DTD of the xMML format version 0.1.1, 2011-02-17
+Document Type Definition DTD of the xMML format version 0.1.2, 2011-07-07
 Author: Joris Borgdorff, J.Borgdorff@uva.nl
 For the latest version, consult the MAPPER project Wiki
 -->
@@ -43,7 +43,7 @@ For the latest version, consult the MAPPER project Wiki
   xmlns:xi CDATA #IMPLIED
   name CDATA #IMPLIED
   version CDATA #IMPLIED
-  xmml_version CDATA #FIXED "0.1.1">
+  xmml_version CDATA #FIXED "0.1.2">
 
 <!-- A short textual description of the parent element (model or submodel) -->
 <!ELEMENT description (#PCDATA)>

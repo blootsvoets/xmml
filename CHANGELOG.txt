@@ -1,4 +1,7 @@
-xMML version 0.1.1
+xMML version 0.1.2
+
+Changes since version 0.1.1
+* Corrected xmml_version attributes of example files
 
 Changes since version 0.1
 * Added an interactive attribute to submodel, instance and coupling

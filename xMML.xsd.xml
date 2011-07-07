@@ -164,7 +164,7 @@
 			<xs:attribute name="xi" type="xs:string"/>
 			<xs:attribute name="name" type="xs:string"/>
 			<xs:attribute name="version" type="xs:string"/>
-			<xs:attribute name="xmml_version" type="xs:string" fixed="0.1.1"/>
+			<xs:attribute name="xmml_version" type="xs:string" fixed="0.1.2"/>
 		</xs:complexType>
 	</xs:element>
 	<xs:complexType name="otherscaleType">
