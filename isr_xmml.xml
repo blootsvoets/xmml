@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE model SYSTEM "xmml.dtd">
-<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.2" xmlns:xi="http://www.w3.org/2001/XInclude">
+<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.3.1" xmlns:xi="http://www.w3.org/2001/XInclude">
   <description>
     A model of the process that occurs in the artery after stenting.
   </description>
@@ -8,28 +8,28 @@
   <definitions>
     <xi:include href="isr_meta.xml#xpointer(/metadata/*)"/>
 
-    <junction id="agents2lattice" type="fan-out">
+    <mapper id="agents2lattice" type="fan-out">
         <ports>
           <in id="cell_info" datatype="agentFull"/>
           <out id="latticeBF" datatype="latticeInt"/>
           <out id="latticeDD" datatype="latticeInt"/>
           <out id="cell_positions" datatype="agentLocations"/>
         </ports>
-    </junction>
-    <junction id="latticeBF2agents" type="fan-in">
+    </mapper>
+    <mapper id="latticeBF2agents" type="fan-in">
         <ports>
           <in id="cell_positions" datatype="agentLocations"/>
           <in id="latticeBF" datatype="latticeDouble"/>
           <out id="cell_dd" datatype="agentDouble"/>
         </ports>
-    </junction>
-    <junction id="latticeDD2agents" type="fan-in">
+    </mapper>
+    <mapper id="latticeDD2agents" type="fan-in">
         <ports>
           <in id="cell_positions" datatype="agentLocations"/>
           <in id="latticeDD" datatype="latticeDouble"/>
           <out id="cell_bf" datatype="agentDouble"/>
         </ports>
-    </junction>
+    </mapper>
   
     <submodel id="INIT" name="Initial cell conditions">
       <timescale delta="1E-3" max="1E-1"/>
@@ -86,9 +86,9 @@
     <instance id="dd" submodel="DD" domain="artery.tissue"/>
     <instance id="smc" submodel="SMC" domain="artery.tissue"/>
 
-    <mapper junction="latticeDD2agents" domain="artery.tissue"/>
-    <mapper junction="latticeBF2agents" domain="artery"/>
-    <mapper junction="agents2lattice" domain="artery"/>
+    <instance mapper="latticeDD2agents" domain="artery.tissue"/>
+    <instance mapper="latticeBF2agents" domain="artery"/>
+    <instance mapper="agents2lattice" domain="artery"/>
     
     <coupling from="ic.cells" to="smc.initial_positions"/>
     <coupling from="smc.cell_positions" to="agents2lattice.cell_info"/>

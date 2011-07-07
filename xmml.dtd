@@ -1,5 +1,5 @@
 <!--
-Document Type Definition DTD of the xMML format version 0.3, 2011-07-07
+Document Type Definition DTD of the xMML format version 0.3.1, 2011-07-07
 Author: Joris Borgdorff, J.Borgdorff@uva.nl
 For the latest version, consult the MAPPER project Wiki
 -->
@@ -52,7 +52,7 @@ Define all elements
   xmlns:xi CDATA #IMPLIED
   name CDATA #IMPLIED
   version CDATA #IMPLIED
-  xmml_version CDATA #FIXED "0.3">
+  xmml_version CDATA #FIXED "0.3.1">
 
 <!-- A short textual description of the parent element (model or submodel) -->
 <!ELEMENT description (#PCDATA)>
@@ -72,7 +72,6 @@ Define all elements
      certain factor, or interpolating in that dimension. -->
 <!ELEMENT filter (description?,implementation?,extra*)>
 <!ATTLIST filter
->>>>>>> krakow_input_2011
   %real;
   datatype_in IDREF #IMPLIED
   datatype_out IDREF #IMPLIED

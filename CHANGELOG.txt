@@ -1,6 +1,10 @@
-xMML version 0.3
-================
+xMML version 0.3.1
+==================
 Date: 2011-07-07.
+
+Changes since version 0.3
+* Fixed accidental merge in xmml.dtd
+* Changed examples to the right version
 
 Changes since version 0.2
 * Replaced the junction element with the mapper element

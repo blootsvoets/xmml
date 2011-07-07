@@ -14,7 +14,7 @@
    <attribute name='xmlns:xi' type='string' use='optional'/>
    <attribute name='name' type='string' use='optional'/>
    <attribute name='version' type='string' use='optional'/>
-   <attribute name='xmml_version' type='string' use='fixed' value='0.3'/>
+   <attribute name='xmml_version' type='string' use='fixed' value='0.3.1'/>
   </complexType>
  </element>
 

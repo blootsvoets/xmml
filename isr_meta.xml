@@ -8,6 +8,6 @@
   <datatype id="latticeMetadata" size_estimate="2*sizeof(int)+4*sizeof(double)"/>
   <datatype id="double" size_estimate="sizeof(double)"/>
   
-  <converter id="latticeDouble2agents" from="latticeDouble" to="agentDouble"/>
-  <converter id="agents2latticeInt" from="agentLocations" to="latticeInt"/>
+  <filter type="converter" id="latticeDouble2agents" datatype_in="latticeDouble" datatype_out="agentDouble"/>
+  <filter type="converter" id="agents2latticeInt" datatype_in="agentLocations" datatype_out="latticeInt"/>
 </metadata>
