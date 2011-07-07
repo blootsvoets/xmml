@@ -14,7 +14,7 @@
    <attribute name='xmlns:xi' type='string' use='optional'/>
    <attribute name='name' type='string' use='optional'/>
    <attribute name='version' type='string' use='optional'/>
-   <attribute name='xmml_version' type='string' use='fixed' value='0.2'/>
+   <attribute name='xmml_version' type='string' use='fixed' value='0.3'/>
   </complexType>
  </element>
 
@@ -28,8 +28,8 @@
    <sequence>
     <element ref='t:datatype' minOccurs='0' maxOccurs='unbounded'/>
     <choice maxOccurs='unbounded'>
-     <element ref='t:converter'/>
-     <element ref='t:junction'/>
+     <element ref='t:filter'/>
+     <element ref='t:mapper'/>
      <element ref='t:submodel'/>
     </choice>
    </sequence>
@@ -40,27 +40,48 @@
   <complexType>
    <attribute name='id' type='ID' use='required'/>
    <attribute name='class' type='string' use='optional'/>
+   <attribute name='version' type='string' use='optional'/>
    <attribute name='size_estimate' type='string' use='optional'/>
   </complexType>
  </element>
 
- <element name='converter'>
-  <complexType>
-   <attribute name='id' type='ID' use='required'/>
-   <attribute name='class' type='string' use='optional'/>
-   <attribute name='from' type='IDREF' use='required'/>
-   <attribute name='to' type='IDREF' use='required'/>
-  </complexType>
- </element>
-
- <element name='junction'>
+ <element name='filter'>
   <complexType>
    <sequence>
-    <element ref='t:ports'/>
+    <element ref='t:description' minOccurs='0' maxOccurs='1'/>
     <element ref='t:implementation' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:extra' minOccurs='0' maxOccurs='unbounded'/>
    </sequence>
    <attribute name='id' type='ID' use='required'/>
    <attribute name='class' type='string' use='optional'/>
+   <attribute name='version' type='string' use='optional'/>
+   <attribute name='datatype_in' type='IDREF' use='optional'/>
+   <attribute name='datatype_out' type='IDREF' use='optional'/>
+   <attribute name='type' use='required'>
+    <simpleType>
+     <restriction base='string'>
+      <enumeration value='interpolation'/>
+      <enumeration value='reduction'/>
+      <enumeration value='converter'/>
+     </restriction>
+    </simpleType>
+   </attribute>
+   <attribute name='dimension' type='string' use='optional'/>
+   <attribute name='factor' type='string' use='optional'/>
+  </complexType>
+ </element>
+
+ <element name='mapper'>
+  <complexType>
+   <sequence>
+    <element ref='t:description' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:ports'/>
+    <element ref='t:implementation' minOccurs='0' maxOccurs='1'/>
+    <element ref='t:extra' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+   <attribute name='id' type='ID' use='required'/>
+   <attribute name='class' type='string' use='optional'/>
+   <attribute name='version' type='string' use='optional'/>
    <attribute name='init' use='default' value='no'>
     <simpleType>
      <restriction base='string'>
@@ -103,6 +124,7 @@
    </sequence>
    <attribute name='id' type='ID' use='required'/>
    <attribute name='class' type='string' use='optional'/>
+   <attribute name='version' type='string' use='optional'/>
    <attribute name='name' type='string' use='optional'/>
    <attribute name='init' use='default' value='no'>
     <simpleType>
@@ -121,7 +143,6 @@
      </restriction>
     </simpleType>
    </attribute>
-   <attribute name='version' type='string' use='optional'/>
    <attribute name='interactive' use='default' value='no'>
     <simpleType>
      <restriction base='string'>
@@ -178,6 +199,7 @@
    <attribute name='id' type='NMTOKENS' use='optional'/>
    <attribute name='delta' type='string' use='optional'/>
    <attribute name='max' type='string' use='optional'/>
+   <attribute name='characteristic' type='string' use='optional'/>
   </complexType>
  </element>
 
@@ -190,6 +212,7 @@
    <attribute name='id' type='NMTOKENS' use='optional'/>
    <attribute name='delta' type='string' use='optional'/>
    <attribute name='max' type='string' use='optional'/>
+   <attribute name='characteristic' type='string' use='optional'/>
    <attribute name='dimensions' type='NMTOKEN' use='optional'/>
   </complexType>
  </element>
@@ -203,6 +226,7 @@
    <attribute name='id' type='NMTOKENS' use='optional'/>
    <attribute name='delta' type='string' use='optional'/>
    <attribute name='max' type='string' use='optional'/>
+   <attribute name='characteristic' type='string' use='optional'/>
    <attribute name='type' type='string' use='optional'/>
    <attribute name='dimensions' type='NMTOKEN' use='optional'/>
   </complexType>
@@ -319,7 +343,6 @@
    <choice maxOccurs='unbounded'>
     <element ref='t:instance'/>
     <element ref='t:coupling'/>
-    <element ref='t:mapper'/>
    </choice>
   </complexType>
  </element>
@@ -331,9 +354,11 @@
     <element ref='t:spacescale' minOccurs='0' maxOccurs='unbounded'/>
     <element ref='t:otherscale' minOccurs='0' maxOccurs='unbounded'/>
     <element ref='t:param' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:extra' minOccurs='0' maxOccurs='unbounded'/>
    </sequence>
    <attribute name='id' type='ID' use='optional'/>
-   <attribute name='submodel' type='IDREF' use='required'/>
+   <attribute name='submodel' type='IDREF' use='optional'/>
+   <attribute name='mapper' type='IDREF' use='optional'/>
    <attribute name='domain' type='string' use='optional'/>
    <attribute name='init' use='optional'>
     <simpleType>
@@ -365,35 +390,11 @@
   </complexType>
  </element>
 
- <element name='mapper'>
-  <complexType>
-   <attribute name='id' type='ID' use='optional'/>
-   <attribute name='junction' type='IDREF' use='required'/>
-   <attribute name='domain' type='string' use='optional'/>
-   <attribute name='interactive' use='optional'>
-    <simpleType>
-     <restriction base='string'>
-      <enumeration value='yes'/>
-      <enumeration value='no'/>
-      <enumeration value='optional'/>
-     </restriction>
-    </simpleType>
-   </attribute>
-   <attribute name='init' use='optional'>
-    <simpleType>
-     <restriction base='string'>
-      <enumeration value='yes'/>
-      <enumeration value='no'/>
-     </restriction>
-    </simpleType>
-   </attribute>
-  </complexType>
- </element>
-
  <element name='coupling'>
   <complexType>
    <sequence>
-    <element ref='t:filter' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:apply' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:extra' minOccurs='0' maxOccurs='unbounded'/>
    </sequence>
    <attribute name='name' type='string' use='optional'/>
    <attribute name='from' type='string' use='required'/>
@@ -411,19 +412,13 @@
   </complexType>
  </element>
 
- <element name='filter'>
+ <element name='apply'>
   <complexType>
-   <attribute name='name' type='string' use='required'/>
-   <attribute name='type' use='required'>
-    <simpleType>
-     <restriction base='string'>
-      <enumeration value='interpolation'/>
-      <enumeration value='reduction'/>
-      <enumeration value='converter'/>
-     </restriction>
-    </simpleType>
-   </attribute>
-   <attribute name='scale' type='string' use='optional'/>
+   <sequence>
+    <element ref='t:param' minOccurs='0' maxOccurs='unbounded'/>
+    <element ref='t:extra' minOccurs='0' maxOccurs='unbounded'/>
+   </sequence>
+   <attribute name='filter' type='IDREF' use='required'/>
    <attribute name='factor' type='string' use='optional'/>
   </complexType>
  </element>

@@ -1,4 +1,16 @@
-xMML version 0.2
+xMML version 0.3
+================
+Date: 2011-07-07.
+
+Changes since version 0.2
+* Replaced the junction element with the mapper element
+* Replaced the mapper element with the instance element
+* Replaced the converter element with the filter element, and added
+  dimension, factor and implementation information to it
+* Replaced the filter element with the apply element
+* Added the extra element to each computational element for any information
+  not captured by other tags.
+* Added a optional version to each computational element
 
 Changes since version 0.1.1
 * Added a junction element in definitions, describing a generic
