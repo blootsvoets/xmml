@@ -10,6 +10,9 @@ Changes since version 0.1.1
 * A converter may not have requirements anymore; a fan-in junction
   mapper can be used instead.
 * Filter type has become mandatory
+* Added a possible characteristic scale
+* Added a release, validation and dtd2xsd conversion script
+  to the bin directory
 
 Changes since version 0.1
 * Added an interactive attribute to submodel, instance and coupling
