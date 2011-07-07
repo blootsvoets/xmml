@@ -1,6 +1,9 @@
-xMML version 0.3.1
+xMML version 0.3.2
 ==================
 Date: 2011-07-07.
+
+Changes since version 0.3.1
+* Changed the 'max' attribute in scale to 'total'
 
 Changes since version 0.3
 * Fixed accidental merge in xmml.dtd

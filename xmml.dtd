@@ -1,5 +1,5 @@
 <!--
-Document Type Definition DTD of the xMML format version 0.3.1, 2011-07-07
+Document Type Definition DTD of the xMML format version 0.3.2, 2011-07-07
 Author: Joris Borgdorff, J.Borgdorff@uva.nl
 For the latest version, consult the MAPPER project Wiki
 -->
@@ -13,7 +13,7 @@ Define reusable attribute entities
 <!ENTITY % scale
   "id NMTOKENS #IMPLIED
   delta CDATA #IMPLIED
-  max CDATA #IMPLIED
+  total CDATA #IMPLIED
   characteristic CDATA #IMPLIED">
 
 <!-- A variable scale, with an optional minimum and maximum value. If the type
@@ -52,7 +52,7 @@ Define all elements
   xmlns:xi CDATA #IMPLIED
   name CDATA #IMPLIED
   version CDATA #IMPLIED
-  xmml_version CDATA #FIXED "0.3.1">
+  xmml_version CDATA #FIXED "0.3.2">
 
 <!-- A short textual description of the parent element (model or submodel) -->
 <!ELEMENT description (#PCDATA)>
@@ -161,8 +161,8 @@ Define all elements
 <!ELEMENT delta EMPTY>
 <!ATTLIST delta %varscale;>
 
-<!ELEMENT max EMPTY>
-<!ATTLIST max %varscale;>
+<!ELEMENT total EMPTY>
+<!ATTLIST total %varscale;>
 
 <!-- Any information about a submodel not captured by any of the other tags.
      If this is used, possibly the information therein can also be included

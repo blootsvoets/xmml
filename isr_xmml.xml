@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE model SYSTEM "xmml.dtd">
-<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.3.1" xmlns:xi="http://www.w3.org/2001/XInclude">
+<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.3.2" xmlns:xi="http://www.w3.org/2001/XInclude">
   <description>
     A model of the process that occurs in the artery after stenting.
   </description>
@@ -32,9 +32,9 @@
     </mapper>
   
     <submodel id="INIT" name="Initial cell conditions">
-      <timescale delta="1E-3" max="1E-1"/>
-      <spacescale delta="1E-5" max="1E-3"/>
-      <spacescale delta="1E-5" max="1E-3"/>
+      <timescale delta="1E-3" total="1E-1"/>
+      <spacescale delta="1E-5" total="1E-3"/>
+      <spacescale delta="1E-5" total="1E-3"/>
 
       <ports>
         <out id="cells" operator="Of" datatype="agentLocations"/>
@@ -42,9 +42,9 @@
     </submodel>
   
     <submodel id="BF" name="Blood flow" stateful="optional">
-      <timescale delta="1E-7" max="1"/>
-      <spacescale delta="1E-5" max="1E-3"/>
-      <spacescale delta="1E-5" max="1E-3"/>
+      <timescale delta="1E-7" total="1"/>
+      <spacescale delta="1E-5" total="1E-3"/>
+      <spacescale delta="1E-5" total="1E-3"/>
 
       <ports>
         <in id="state_start" operator="finit" type="state"/>
@@ -55,9 +55,9 @@
     </submodel>
   
     <submodel id="SMC" name="Smooth muscle cells">
-      <timescale delta="1E3" max="1E7"/>
-      <spacescale delta="1E-5" max="1E-3"/>
-      <spacescale delta="1E-5" max="1E-3"/>
+      <timescale delta="1E3" total="1E7"/>
+      <spacescale delta="1E-5" total="1E-3"/>
+      <spacescale delta="1E-5" total="1E-3"/>
       <param id="n" value="1000"/>
     
       <ports>
@@ -69,9 +69,9 @@
     </submodel>
   
     <submodel id="DD" name="Drug diffusion">
-      <timescale delta="1E3" max="1E7"/>
-      <spacescale delta="1E-5" max="1E-3"/>
-      <spacescale delta="1E-5" max="1E-3"/>
+      <timescale delta="1E3" total="1E7"/>
+      <spacescale delta="1E-5" total="1E-3"/>
+      <spacescale delta="1E-5" total="1E-3"/>
     
       <ports>
         <in id="boundary" operator="finit" datatype="latticeInt"/>

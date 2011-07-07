@@ -14,7 +14,7 @@
    <attribute name='xmlns:xi' type='string' use='optional'/>
    <attribute name='name' type='string' use='optional'/>
    <attribute name='version' type='string' use='optional'/>
-   <attribute name='xmml_version' type='string' use='fixed' value='0.3.1'/>
+   <attribute name='xmml_version' type='string' use='fixed' value='0.3.2'/>
   </complexType>
  </element>
 
@@ -198,7 +198,7 @@
    </sequence>
    <attribute name='id' type='NMTOKENS' use='optional'/>
    <attribute name='delta' type='string' use='optional'/>
-   <attribute name='max' type='string' use='optional'/>
+   <attribute name='total' type='string' use='optional'/>
    <attribute name='characteristic' type='string' use='optional'/>
   </complexType>
  </element>
@@ -211,7 +211,7 @@
    </sequence>
    <attribute name='id' type='NMTOKENS' use='optional'/>
    <attribute name='delta' type='string' use='optional'/>
-   <attribute name='max' type='string' use='optional'/>
+   <attribute name='total' type='string' use='optional'/>
    <attribute name='characteristic' type='string' use='optional'/>
    <attribute name='dimensions' type='NMTOKEN' use='optional'/>
   </complexType>
@@ -225,7 +225,7 @@
    </sequence>
    <attribute name='id' type='NMTOKENS' use='optional'/>
    <attribute name='delta' type='string' use='optional'/>
-   <attribute name='max' type='string' use='optional'/>
+   <attribute name='total' type='string' use='optional'/>
    <attribute name='characteristic' type='string' use='optional'/>
    <attribute name='type' type='string' use='optional'/>
    <attribute name='dimensions' type='NMTOKEN' use='optional'/>
@@ -254,7 +254,7 @@
   </complexType>
  </element>
 
- <element name='max'>
+ <element name='total'>
   <complexType>
    <attribute name='type' use='default' value='variable'>
     <simpleType>
