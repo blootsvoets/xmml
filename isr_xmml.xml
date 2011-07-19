@@ -30,6 +30,8 @@
           <out id="cell_bf" datatype="agentDouble"/>
         </ports>
     </mapper>
+    
+    <filter id="coarsenGrid" type="reduction" dimension="spatial"/>
   
     <submodel id="INIT" name="Initial cell conditions">
       <timescale delta="1E-3" total="1E-1"/>
@@ -41,7 +43,7 @@
       </ports>
     </submodel>
   
-    <submodel id="BF" name="Blood flow" stateful="optional">
+    <submodel id="BF" name="Blood flow" stateful="optional" class="nl.computationalscience.uva.isr3d.kernel.bf.BFController">
       <timescale delta="1E-7" total="1"/>
       <spacescale delta="1E-5" total="1E-3"/>
       <spacescale delta="1E-5" total="1E-3"/>
@@ -52,6 +54,12 @@
         <out id="shear_stress" operator="Of" datatype="latticeDouble"/>
         <out id="state_end" operator="Of" type="state"/>
       </ports>
+      
+      <implementation size="2 MB" runtime="30 min" memory="30 MB" cores="1024">
+        <platform arch="x84-64" os="linux"/>
+        <library name="intel-fortran-11.1"/>
+        <library name="mpich2-1.4"/>
+      </implementation>
     </submodel>
   
     <submodel id="SMC" name="Smooth muscle cells">
@@ -70,8 +78,8 @@
   
     <submodel id="DD" name="Drug diffusion">
       <timescale delta="1E3" total="1E7"/>
-      <spacescale delta="1E-5" total="1E-3"/>
-      <spacescale delta="1E-5" total="1E-3"/>
+      <spacescale delta="1.2E-5" total="1E-3"/>
+      <spacescale delta="1.2E-5" total="1E-3"/>
     
       <ports>
         <in id="boundary" operator="finit" datatype="latticeInt"/>
@@ -90,10 +98,12 @@
     <instance mapper="latticeBF2agents" domain="artery"/>
     <instance mapper="agents2lattice" domain="artery"/>
     
-    <coupling from="ic.cells" to="smc.initial_positions"/>
+    <coupling from="ic.cells" to="smc.initial_positions" size="10 MB"/>
     <coupling from="smc.cell_positions" to="agents2lattice.cell_info"/>
     <coupling from="agents2lattice.latticeBF" to="bf.boundary"/>
-    <coupling from="agents2lattice.latticeDD" to="dd.boundary"/>
+    <coupling from="agents2lattice.latticeDD" to="dd.boundary">
+      <apply filter="coarsenGrid" factor="1.2"/>
+    </coupling>
     <coupling from="agents2lattice.cell_positions" to="latticeDD2agents.cell_positions"/>
     <coupling from="agents2lattice.cell_positions" to="latticeBF2agents.cell_positions"/>
     <coupling from="dd.drug_concentration" to="latticeDD2agents.latticeDD"/>
