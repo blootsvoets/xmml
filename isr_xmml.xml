@@ -9,6 +9,9 @@
     <xi:include href="isr_meta.xml#xpointer(/metadata/*)"/>
 
     <mapper id="agents2lattice" type="fan-out">
+	<description>
+           Maps a number of agents or particles to a lattice.
+	</description>
         <ports>
           <in id="cell_info" datatype="agentFull"/>
           <out id="latticeBF" datatype="latticeInt"/>
@@ -44,6 +47,11 @@
     </submodel>
   
     <submodel id="BF" name="Blood flow" stateful="optional" class="nl.computationalscience.uva.isr3d.kernel.bf.BFController">
+	<description>
+           Calculates the blood flow within a lattice.
+
+           At the moment BF keeps a state to ease subsequent flow calculations.
+	</description>
       <timescale delta="1E-7" total="1"/>
       <spacescale delta="1E-5" total="1E-3"/>
       <spacescale delta="1E-5" total="1E-3"/>
