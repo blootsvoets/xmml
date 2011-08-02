@@ -569,7 +569,7 @@ sub printAttrDecls{
 					 } elsif ($atts[$i] eq "#IMPLIED") {
 						  print " use='optional'";
 					 } else {
-						  print " use='default' value='$atts[$i]'";
+						  print " default='optional' default='$atts[$i]'";
 					 }
 
 					 # enumerate
