@@ -1,2 +1,6 @@
 release/*
 !.gitignore
+/nbproject
+build.xml
+manifest.mf
+

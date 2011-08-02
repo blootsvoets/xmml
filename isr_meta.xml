@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
-<metadata>
-  <datatype id="latticeInt" size_estimate="x*y*sizeof(int)"/>
-  <datatype id="latticeDouble" size_estimate="x*y*sizeof(double)"/>
-  <datatype id="agentLocations" size_estimate="4*n*sizeof(double)"/>
-  <datatype id="agentDouble" size_estimate="n*sizeof(double)"/>
-  <datatype id="agentFull" size_estimate="4*n*sizeof(double)+n*sizeof(double)"/>
-  <datatype id="latticeMetadata" size_estimate="2*sizeof(int)+4*sizeof(double)"/>
-  <datatype id="double" size_estimate="sizeof(double)"/>
+<metadata xmlns:x="http://www.mapper-project.eu/xmml">
+  <x:datatype id="latticeInt" size_estimate="x*y*sizeof(int)"/>
+  <x:datatype id="latticeDouble" size_estimate="x*y*sizeof(double)"/>
+  <x:datatype id="agentLocations" size_estimate="4*n*sizeof(double)"/>
+  <x:datatype id="agentDouble" size_estimate="n*sizeof(double)"/>
+  <x:datatype id="agentFull" size_estimate="4*n*sizeof(double)+n*sizeof(double)"/>
+  <x:datatype id="latticeMetadata" size_estimate="2*sizeof(int)+4*sizeof(double)"/>
+  <x:datatype id="double" size_estimate="sizeof(double)"/>
   
-  <filter type="converter" id="latticeDouble2agents" datatype_in="latticeDouble" datatype_out="agentDouble"/>
-  <filter type="converter" id="agents2latticeInt" datatype_in="agentLocations" datatype_out="latticeInt"/>
+  <x:filter type="converter" id="latticeDouble2agents" datatype_in="latticeDouble" datatype_out="agentDouble"/>
+  <x:filter type="converter" id="agents2latticeInt" datatype_in="agentLocations" datatype_out="latticeInt"/>
 </metadata>
