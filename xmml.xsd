@@ -129,7 +129,7 @@
 			<attribute name="datatype_out" type="NCName" use="optional"/>
 			<attribute name="type" use="required">
 				<simpleType>
-					<restriction base="string">
+					<restriction base="NMTOKEN">
 						<enumeration value="interpolation"/>
 						<enumeration value="reduction"/>
 						<enumeration value="converter"/>
@@ -162,7 +162,7 @@
 			<attributeGroup ref="t:realObject"/>
 			<attribute name="type" use="required">
 				<simpleType>
-					<restriction base="string">
+					<restriction base="NMTOKEN">
 						<enumeration value="fan-in"/>
 						<enumeration value="fan-out"/>
 					</restriction>
@@ -451,7 +451,7 @@
 		<annotation>
 	    <documentation>A choice between yes and no.</documentation>
 	  </annotation>
-    <restriction base="string">
+    <restriction base="NMTOKEN">
 			<enumeration value="yes"/>
 			<enumeration value="no"/>
 		</restriction>
@@ -461,7 +461,7 @@
 	    <documentation>An &#x2018;optional&#x2019; option added to yes-no
 	      choice.</documentation>
 	  </annotation>
-		<restriction base="string">
+		<restriction base="NMTOKEN">
 			<enumeration value="yes"/>
 			<enumeration value="no"/>
 			<enumeration value="optional"/>

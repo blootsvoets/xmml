@@ -32,7 +32,7 @@
 	</xsl:choose>
       </xsl:when>
       <xsl:when test="@ref">
-	<xsl:value-of select="@ref"/>
+	<xsl:value-of select="substring-after(@ref,':')"/>
 	<xsl:if test="@ref = 'xml:lang'">
 	  <xsl:text> CDATA</xsl:text>
 	</xsl:if>
@@ -58,15 +58,15 @@
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template match="xs:attribute[@ref]" mode="attr-comments">
+  <xsl:template match="xs:attribute[@ref][xs:annotation/xs:documentation]" mode="attr-comments">
     <xsl:text>&#xa;</xsl:text>
-    <xsl:value-of select="@ref"/>
+    <xsl:value-of select="substring-after(@ref,':')"/>
     <xsl:text>: </xsl:text>
     <xsl:value-of select="xs:annotation/xs:documentation"/>
     <xsl:text>&#xa;</xsl:text>
   </xsl:template>
 
-  <xsl:template match="xs:attribute" mode="attr-comments">
+  <xsl:template match="xs:attribute[xs:annotation/xs:documentation]" mode="attr-comments">
     <xsl:text>&#xa;</xsl:text>
     <xsl:value-of select="@name"/>
     <xsl:text>: </xsl:text>
@@ -80,7 +80,7 @@
 
   <xsl:template match="xs:attributeGroup[@ref]" mode="attributes">
     <xsl:text>&#xa;  %</xsl:text>
-    <xsl:value-of select="@ref"/>
+    <xsl:value-of select="substring-after(@ref,':')"/>
     <xsl:text>;</xsl:text>
   </xsl:template>
 
@@ -133,7 +133,7 @@
               <xsl:if test="self::xs:group">
                 <xsl:text>%</xsl:text>
               </xsl:if>
-              <xsl:value-of select="@ref"/>
+              <xsl:value-of select="substring-after(@ref,':')"/>
               <xsl:if test="self::xs:group">
                 <xsl:text>;</xsl:text>
               </xsl:if>
@@ -201,11 +201,11 @@
 		  descendant::xs:attributeGroup">
       <xsl:text>&lt;!ATTLIST </xsl:text>
       <xsl:value-of select="@name"/>
-      <xsl:if test="/xs:schema/@targetNamespace">
+      <!--<xsl:if test="/xs:schema/@targetNamespace">
         <xsl:text>&#xa;  xmlns CDATA #FIXED "</xsl:text>
         <xsl:value-of select="/xs:schema/@targetNamespace"/>
         <xsl:text>"</xsl:text>
-      </xsl:if>
+      </xsl:if>-->
       <xsl:if
 	test="descendant::xs:attribute |
 	      descendant::xs:attributeGroup">
@@ -220,7 +220,7 @@
 
   <xsl:template match="xs:element[@ref]">
     <xsl:text> </xsl:text>
-    <xsl:value-of select="@ref"/>
+    <xsl:value-of select="substring-after(@ref,':')"/>
     <xsl:call-template name="occurrence"/>
   </xsl:template>
 
@@ -242,7 +242,7 @@
 
   <xsl:template match="xs:group[@ref]">
     <xsl:text> (%</xsl:text>
-    <xsl:value-of select="@ref"/>
+    <xsl:value-of select="substring-after(@ref,':')"/>
     <xsl:text>;)</xsl:text>
     <xsl:call-template name="occurrence"/>
   </xsl:template>
