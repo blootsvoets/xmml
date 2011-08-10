@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="no"?>
-<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.3.3" xmlns="http://www.mapper-project.eu/xmml" xmlns:xi="http://www.w3.org/2001/XInclude">
+<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.3.3" xmlns="http://www.mapper-project.eu/xmml" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:mad="http://www.mapper-project.eu/mad">
   <description>
     A model of the process that occurs in the artery after stenting.
   </description>
@@ -96,7 +96,11 @@
   </definitions>
   
   <topology>
-    <instance id="ic" submodel="INIT" domain="artery"/>
+    <instance id="ic" submodel="INIT" domain="artery"><extra>
+      <mad:portMapping><mad:portMapping id="005" name="inDistance"/>
+        <mad:portMapping id="006" name="outDistance"/></mad:portMapping>
+    <mad:position x="431" y="587"/>
+    </extra></instance>
     <instance id="bf" submodel="BF" domain="artery.blood"/>
     <instance id="dd" submodel="DD" domain="artery.tissue"/>
     <instance id="smc" submodel="SMC" domain="artery.tissue"/>
@@ -105,7 +109,7 @@
     <instance mapper="latticeBF2agents" domain="artery"/>
     <instance mapper="agents2lattice" domain="artery"/>
     
-    <coupling from="ic.cells" to="smc.initial_positions" size="10 MB"/>
+    <coupling mad:fromPortId="005" from="ic.cells" to="smc.initial_positions" size="10 MB"/>
     <coupling from="smc.cell_positions" to="agents2lattice.cell_info"/>
     <coupling from="agents2lattice.latticeBF" to="bf.boundary"/>
     <coupling from="agents2lattice.latticeDD" to="dd.boundary">
