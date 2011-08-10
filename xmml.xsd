@@ -29,7 +29,7 @@
 			<attribute name="name" type="string"/>
 			<attribute name="version" type="string"/>
 			<attribute name="xmml_version" fixed="0.3.3"/>
-			<anyAttribute/>
+			<anyAttribute processContents="lax"/>
 		</complexType>
   
 		<unique name="datatypeId">
@@ -90,7 +90,7 @@
 				<element ref="t:datatype" minOccurs="0" maxOccurs="unbounded"/>
 				<element ref="t:element" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
-  		<anyAttribute/>
+  		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 
@@ -254,7 +254,7 @@
 		<complexType>
 			<attribute name="id" type="NCName" use="required"/>
 			<attribute name="value" type="string" use="required"/>
-  		<anyAttribute/>
+  		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 
@@ -291,7 +291,7 @@
 				<element ref="t:instance"/>
 				<element ref="t:coupling"/>
 			</choice>
-  		<anyAttribute/>
+  		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 
@@ -331,7 +331,7 @@
 					</restriction>
 				</simpleType>
 			</attribute>
-			<anyAttribute/>
+			<anyAttribute processContents="lax"/>
 		</complexType>
 		<unique name="instanceParamId">
 			<selector xpath="t:param"/>
@@ -359,7 +359,7 @@
 			    <annotation><documentation>
   			  Whether the data that is sent through the conduit must be evaluated manually
           before it can be passed to the next.</documentation></annotation></attribute>
-			<anyAttribute/>
+			<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 
@@ -377,7 +377,7 @@
 			<attribute name="factor" type="t:unit"><annotation><documentation>
 			  Overrides the factor belonging to the filter.
 			  </documentation></annotation></attribute>
-			<anyAttribute/>
+			<anyAttribute processContents="lax"/>
 		</complexType>
 		<unique name="applyParamId">
 			<selector xpath="t:param"/>
@@ -406,7 +406,7 @@
 			<attribute name="cores" type="positiveInteger"/>
 			<attribute name="language" type="string"><annotation><documentation>
 			  The programming language that is used.</documentation></annotation></attribute>
-  		<anyAttribute/>
+  		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 
@@ -415,14 +415,14 @@
 			<attribute name="arch" type="string"/>
 			<attribute name="os" type="string" use="required"/>
 			<attribute name="preferred" type="t:YesNoChoice"/>
-  		<anyAttribute/>
+  		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 
 	<element name="library">
 		<complexType>
 			<attribute name="name" type="string" use="required"/>
-  		<anyAttribute/>
+  		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 	
@@ -437,7 +437,7 @@
 		<attribute name="delta" type="t:unit"/>
 		<attribute name="total" type="t:unit"/>
 		<attribute name="characteristic" type="t:unit"/>
-		<anyAttribute/>
+		<anyAttribute processContents="lax"/>
 	</complexType>
  
  	<complexType name="multiDimensionalScale"><complexContent>
@@ -453,7 +453,7 @@
 		<attribute name="id" type="NCName" use="required"/>
 		<attribute name="class" type="string"/>
 		<attribute name="version" type="string"/>
-		<anyAttribute/>		
+		<anyAttribute processContents="lax"/>		
   </complexType>
 
   <complexType name="computationalElement">
@@ -544,9 +544,9 @@
 	    <documentation>Any content is possible within this type</documentation>
 	  </annotation>
 		<sequence>
-			<any minOccurs="0" maxOccurs="unbounded" processContents="skip"/>
+			<any minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
 		</sequence>
-		<anyAttribute/>
+		<anyAttribute processContents="lax"/>
 	</complexType>
 
 	<complexType name="port">
@@ -570,7 +570,7 @@
 				</restriction>
 			</simpleType>
 		</attribute>
-		<anyAttribute/>
+		<anyAttribute processContents="lax"/>
 	</complexType>
  
 	<complexType name="range">
@@ -590,6 +590,6 @@
 		</attribute>
 		<attribute name="min" type="t:unit"/>
 		<attribute name="max" type="t:unit"/>
-		<anyAttribute/>
+		<anyAttribute processContents="lax"/>
 	</complexType>
 </schema>
