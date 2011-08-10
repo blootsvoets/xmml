@@ -26,8 +26,8 @@
 				<element ref="t:topology"/>
 			</sequence>
 			<attribute name="id" type="NCName" use="required"/>
-			<attribute name="name" type="string" use="optional"/>
-			<attribute name="version" type="string" use="optional"/>
+			<attribute name="name" type="string"/>
+			<attribute name="version" type="string"/>
 			<attribute name="xmml_version" fixed="0.3.3"/>
 			<anyAttribute/>
 		</complexType>
@@ -100,7 +100,7 @@
 	  </documentation></annotation>
 		<complexType><complexContent>
 		  <extension base="t:definition">
-  			<attribute name="size_estimate" type="string" use="optional">
+  			<attribute name="size_estimate" type="string">
   			  <annotation><documentation>
   			    A function in terms of the scales and params of the
   			    submodel it originated from.
@@ -125,19 +125,19 @@
   				<element ref="t:implementation" minOccurs="0" maxOccurs="1"/>
   				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
   			</sequence>
-  			<attribute name="datatype_in" type="NCName" use="optional"/>
-  			<attribute name="datatype_out" type="NCName" use="optional"/>
+  			<attribute name="datatype_in" type="NCName"/>
+  			<attribute name="datatype_out" type="NCName"/>
   			<attribute name="type" use="required">
   				<simpleType>
-  					<restriction base="string">
+  					<restriction base="NCName">
   						<enumeration value="interpolation"/>
   						<enumeration value="reduction"/>
   						<enumeration value="converter"/>
   					</restriction>
   				</simpleType>
   			</attribute>
-  			<attribute name="dimension" type="string" use="optional"/>
-  			<attribute name="factor" type="t:unit" use="optional"/>
+  			<attribute name="dimension" type="string"/>
+  			<attribute name="factor" type="t:unit"/>
   		</extension>
 		</complexContent></complexType>
 		<unique name="filterParamId">
@@ -167,7 +167,7 @@
   			</sequence>
   			<attribute name="type" use="required">
   				<simpleType>
-  					<restriction base="string">
+  					<restriction base="NCName">
   						<enumeration value="fan-in"/>
   						<enumeration value="fan-out"/>
   					</restriction>
@@ -201,8 +201,8 @@
   				<element ref="t:implementation" minOccurs="0" maxOccurs="1"/>
   				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
   			</sequence>
-  			<attribute name="name" type="string" use="optional"/>
-  			<attribute name="stateful" type="t:OptionalChoice" use="optional" default="no"/>
+  			<attribute name="name" type="string"/>
+  			<attribute name="stateful" type="t:OptionalChoice" default="no"/>
   		</extension>
 		</complexContent></complexType>
 		<unique name="submodelParamId">
@@ -240,7 +240,7 @@
     </documentation></annotation>
 	  <complexType><complexContent>
 	    <extension base="t:multiDimensionalScale">
-			  <attribute name="type" type="string" use="optional"/>
+			  <attribute name="type" type="string"/>
 		  </extension>
 		</complexContent></complexType>
 	</element>
@@ -310,23 +310,23 @@
 				<element ref="t:param" minOccurs="0" maxOccurs="unbounded"/>
 				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
-			<attribute name="id" type="ID" use="optional"/>
-			<attribute name="submodel" type="NCName" use="optional"/>
-			<attribute name="mapper" type="NCName" use="optional"/>
-			<attribute name="domain" type="t:domain" use="optional"><annotation><documentation>
+			<attribute name="id" type="ID"/>
+			<attribute name="submodel" type="NCName"/>
+			<attribute name="mapper" type="NCName"/>
+			<attribute name="domain" type="t:domain"><annotation><documentation>
 			  A domain name may be supplied, used to identify single domain interaction.
 			  </documentation></annotation></attribute>
-			<attribute name="init" type="t:YesNoChoice" use="optional"/>
-			<attribute name="interactive" type="t:OptionalChoice" use="optional"/>
-			<attribute name="stateful" type="t:OptionalChoice" use="optional"/>
-			<attribute name="multiplicity" use="optional">
+			<attribute name="init" type="t:YesNoChoice"/>
+			<attribute name="interactive" type="t:OptionalChoice"/>
+			<attribute name="stateful" type="t:OptionalChoice"/>
+			<attribute name="multiplicity">
 			  <annotation><documentation>
 			    A multiplicity is a number that specifies how many instances should be
           created. If this argument is used and not 1, it should be connected
           using mappers. Alternatively, different instances can be addressed using
           array notation, for instance: instanceA[0].</documentation></annotation>
 				<simpleType>
-					<restriction base="string">
+					<restriction base="NCName">
 						<pattern value="[0-9]+|dynamic"/>
 					</restriction>
 				</simpleType>
@@ -349,13 +349,13 @@
 				<element ref="t:apply" minOccurs="0" maxOccurs="unbounded"/>
 				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
-			<attribute name="name" type="string" use="optional"/>
+			<attribute name="name" type="string"/>
 			<attribute name="from" type="t:instancePort" use="required"/>
 			<attribute name="to" type="t:instancePort" use="required"/>
-			<attribute name="size" type="t:unit" use="optional"><annotation><documentation>
+			<attribute name="size" type="t:unit"><annotation><documentation>
 			  Size can be specified if not already done in the datatypes.
 			  </documentation></annotation></attribute>
-			<attribute name="interactive" type="t:OptionalChoice" use="optional" default="no">
+			<attribute name="interactive" type="t:OptionalChoice" default="no">
 			    <annotation><documentation>
   			  Whether the data that is sent through the conduit must be evaluated manually
           before it can be passed to the next.</documentation></annotation></attribute>
@@ -374,7 +374,7 @@
 				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
 			<attribute name="filter" type="NCName" use="required"/>
-			<attribute name="factor" type="t:unit" use="optional"><annotation><documentation>
+			<attribute name="factor" type="t:unit"><annotation><documentation>
 			  Overrides the factor belonging to the filter.
 			  </documentation></annotation></attribute>
 			<anyAttribute/>
@@ -396,15 +396,15 @@
 				<element ref="t:platform" minOccurs="0" maxOccurs="unbounded"/>
 				<element ref="t:library" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
-			<attribute name="size" type="t:unit" use="optional"><annotation><documentation>
+			<attribute name="size" type="t:unit"><annotation><documentation>
 			  Size of the compiled code.
 			  </documentation></annotation></attribute>
-			<attribute name="runtime" type="t:unit" use="optional"><annotation><documentation>
+			<attribute name="runtime" type="t:unit"><annotation><documentation>
 			  Typical estimated runtime on the preferred platform.
 			  </documentation></annotation></attribute>             
-			<attribute name="memory" type="t:unit" use="optional"/>
-			<attribute name="cores" type="positiveInteger" use="optional"/>
-			<attribute name="language" type="string" use="optional"><annotation><documentation>
+			<attribute name="memory" type="t:unit"/>
+			<attribute name="cores" type="positiveInteger"/>
+			<attribute name="language" type="string"><annotation><documentation>
 			  The programming language that is used.</documentation></annotation></attribute>
   		<anyAttribute/>
 		</complexType>
@@ -412,9 +412,9 @@
 
 	<element name="platform">
 		<complexType>
-			<attribute name="arch" type="string" use="optional"/>
+			<attribute name="arch" type="string"/>
 			<attribute name="os" type="string" use="required"/>
-			<attribute name="preferred" type="t:YesNoChoice" use="optional"/>
+			<attribute name="preferred" type="t:YesNoChoice"/>
   		<anyAttribute/>
 		</complexType>
 	</element>
@@ -433,16 +433,16 @@
 			<element name="delta" type="t:range" minOccurs="0" maxOccurs="1"/>
 			<element name="total" type="t:range" minOccurs="0" maxOccurs="1"/>
 		</sequence>
-		<attribute name="id" type="NCName" use="optional"/>
-		<attribute name="delta" type="t:unit" use="optional"/>
-		<attribute name="total" type="t:unit" use="optional"/>
-		<attribute name="characteristic" type="t:unit" use="optional"/>
+		<attribute name="id" type="NCName"/>
+		<attribute name="delta" type="t:unit"/>
+		<attribute name="total" type="t:unit"/>
+		<attribute name="characteristic" type="t:unit"/>
 		<anyAttribute/>
 	</complexType>
  
  	<complexType name="multiDimensionalScale"><complexContent>
     <extension base="t:scale">
-		  <attribute name="dimensions" type="positiveInteger" use="optional"/>
+		  <attribute name="dimensions" type="positiveInteger"/>
 	  </extension></complexContent>
 	</complexType>
  
@@ -451,8 +451,8 @@
       Represent an implemented entity.
     </documentation></annotation>
 		<attribute name="id" type="NCName" use="required"/>
-		<attribute name="class" type="string" use="optional"/>
-		<attribute name="version" type="string" use="optional"/>
+		<attribute name="class" type="string"/>
+		<attribute name="version" type="string"/>
 		<anyAttribute/>		
   </complexType>
 
@@ -461,8 +461,8 @@
       Represent a computational element.
     </documentation></annotation>
     <complexContent><extension base="t:definition">
-      <attribute name="init" type="t:YesNoChoice" use="optional" default="no"/>
-			<attribute name="interactive" type="t:OptionalChoice" use="optional" default="no"/>
+      <attribute name="init" type="t:YesNoChoice" default="no"/>
+			<attribute name="interactive" type="t:OptionalChoice" default="no"/>
     </extension></complexContent>
   </complexType>
 
@@ -472,7 +472,7 @@
 		<annotation>
 	    <documentation>A choice between yes and no.</documentation>
 	  </annotation>
-    <restriction base="string">
+    <restriction base="NCName">
 			<enumeration value="yes"/>
 			<enumeration value="no"/>
 		</restriction>
@@ -482,7 +482,7 @@
 	    <documentation>An `optional' option added to yes-no
 	      choice.</documentation>
 	  </annotation>
-		<restriction base="string">
+		<restriction base="NCName">
 			<enumeration value="yes"/>
 			<enumeration value="no"/>
 			<enumeration value="optional"/>
@@ -492,7 +492,7 @@
 	  <annotation><documentation>
 	    Operators in a submodel execution loop.
 	  </documentation></annotation>
-	  <restriction base="string">
+	  <restriction base="NCName">
 			<enumeration value="finit"/>
 			<enumeration value="Oi"/>
 			<enumeration value="S"/>
@@ -560,11 +560,11 @@
     </annotation>
     
 		<attribute name="id" type="NCName" use="required"/>
-		<attribute name="operator" type="t:SEL" use="optional"/>
-		<attribute name="datatype" type="NCName" use="optional"/>
-		<attribute name="type" use="optional" default="normal">
+		<attribute name="operator" type="t:SEL"/>
+		<attribute name="datatype" type="NCName"/>
+		<attribute name="type" default="normal">
 			<simpleType>
-				<restriction base="string">
+				<restriction base="NCName">
 					<enumeration value="state"/>
 					<enumeration value="normal"/>
 				</restriction>
@@ -580,16 +580,16 @@
          specified for each submodel instance that uses it.
     </documentation></annotation>
     
-		<attribute name="type" use="optional" default="variable">
+		<attribute name="type" default="variable">
 			<simpleType>
-				<restriction base="string">
+				<restriction base="NCName">
 					<enumeration value="variable"/>
 					<enumeration value="fixed"/>
 				</restriction>
 			</simpleType>
 		</attribute>
-		<attribute name="min" type="string" use="optional"/>
-		<attribute name="max" type="string" use="optional"/>
+		<attribute name="min" type="t:unit"/>
+		<attribute name="max" type="t:unit"/>
 		<anyAttribute/>
 	</complexType>
 </schema>
