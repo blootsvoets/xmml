@@ -28,7 +28,7 @@
 			<attribute name="id" type="NCName" use="required"/>
 			<attribute name="name" type="string"/>
 			<attribute name="version" type="string"/>
-			<attribute name="xmml_version" fixed="0.3.3"/>
+			<attribute name="xmml_version" fixed="0.3.3" type="t:version"/>
 			<anyAttribute processContents="lax"/>
 		</complexType>
   
@@ -46,6 +46,10 @@
 		</unique>
 		<unique name="filterId">
 			<selector xpath="t:definitions/t:filter"/>
+			<field xpath="@id"/>
+		</unique>
+		<unique name="instanceId">
+			<selector xpath="t:topology/t:instance"/>
 			<field xpath="@id"/>
 		</unique>
 		
@@ -88,7 +92,11 @@
 		<complexType>
 			<sequence>
 				<element ref="t:datatype" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:element" minOccurs="0" maxOccurs="unbounded"/>
+				<choice minOccurs="0" maxOccurs="unbounded">
+					<element ref="t:filter"/>
+					<element ref="t:mapper"/>
+					<element ref="t:submodel"/>
+				</choice>
 			</sequence>
   		<anyAttribute processContents="lax"/>
 		</complexType>
@@ -100,7 +108,7 @@
 	  </documentation></annotation>
 		<complexType><complexContent>
 		  <extension base="t:definition">
-  			<attribute name="size_estimate" type="string">
+  			<attribute name="size_estimate" type="t:formula">
   			  <annotation><documentation>
   			    A function in terms of the scales and params of the
   			    submodel it originated from.
@@ -109,9 +117,7 @@
 		</complexContent></complexType>
 	</element>
 
-  <element name="element" abstract="true"/>
-
-	<element name="filter" substitutionGroup="t:element">
+	<element name="filter">
 	  <annotation><documentation>
 	    A conduit filter, filtering a type of data and either converting it to
       another type of data, or reducing the data over a dimension with a
@@ -137,7 +143,7 @@
   				</simpleType>
   			</attribute>
   			<attribute name="dimension" type="string"/>
-  			<attribute name="factor" type="t:unit"/>
+  			<attribute name="factor" type="t:formula"/>
   		</extension>
 		</complexContent></complexType>
 		<unique name="filterParamId">
@@ -146,7 +152,7 @@
 		</unique>
 	</element>
 
-	<element name="mapper" substitutionGroup="t:element">
+	<element name="mapper">
 	  <annotation><documentation>
 	    A fan-in or fan-out mapper. If the type is fan-in, it may have multiple
       in ports and one out port, otherwise, one in port and multiple out ports.
@@ -181,7 +187,7 @@
 		</unique>
 	</element>
 
-	<element name="submodel" substitutionGroup="t:element">
+	<element name="submodel">
 	  <annotation><documentation>
 	    Definition of a single code of a single submodel. Attributes state whether
       the submodel should be started at initialization if this is ambiguous,
@@ -287,10 +293,10 @@
 	    The instantiation of computational elements and the couplings between them.
     </documentation></annotation>
 		<complexType>
-			<choice maxOccurs="unbounded">
-				<element ref="t:instance"/>
-				<element ref="t:coupling"/>
-			</choice>
+			<sequence>
+				<element ref="t:instance" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="t:coupling" minOccurs="0" maxOccurs="unbounded"/>
+			</sequence>
   		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
@@ -310,7 +316,7 @@
 				<element ref="t:param" minOccurs="0" maxOccurs="unbounded"/>
 				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
-			<attribute name="id" type="ID"/>
+			<attribute name="id" type="NCName"/>
 			<attribute name="submodel" type="NCName"/>
 			<attribute name="mapper" type="NCName"/>
 			<attribute name="domain" type="t:domain"><annotation><documentation>
@@ -374,7 +380,7 @@
 				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
 			<attribute name="filter" type="NCName" use="required"/>
-			<attribute name="factor" type="t:unit"><annotation><documentation>
+			<attribute name="factor" type="t:formula"><annotation><documentation>
 			  Overrides the factor belonging to the filter.
 			  </documentation></annotation></attribute>
 			<anyAttribute processContents="lax"/>
@@ -537,6 +543,22 @@
 		</restriction>
 	</simpleType>
 	
+	<simpleType name="version">
+	  <annotation><documentation>
+	    Version number of xMML.
+	  </documentation></annotation>
+	  <restriction base="string">
+	    <pattern value="\p{N}+(\.\p{N}+)*(\.\p{N}+-?(\p{L}|\p{N})+)?"/>
+	  </restriction>
+	</simpleType>
+
+	<simpleType name="formula">
+	  <annotation><documentation>
+	    A formula with variables and some standard operators.
+	  </documentation></annotation>
+	  <restriction base="string"/>
+	</simpleType>
+
 	<!-- Shared attributes and elements -->
 	
 	<complexType name="anyContent" mixed="true">

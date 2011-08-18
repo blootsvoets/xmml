@@ -5,7 +5,7 @@ if [[ $# -eq 0 ]]; then
   echo "Usage: validate xmml_file [ validated_file ]"
 else
   # Validate using xmllint, doing any xincludes necessary
-  COMMAND="xmllint --xinclude --postvalid"
+  COMMAND="xmllint --xinclude --schema xmml.xsd"
   if [[ $# -eq 1 ]]; then
     EXTRA=""
     $COMMAND --noout $1
