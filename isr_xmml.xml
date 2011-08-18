@@ -22,14 +22,14 @@
         <ports>
           <in id="cell_positions" datatype="agentLocations"/>
           <in id="latticeBF" datatype="latticeDouble"/>
-          <out id="cell_dd" datatype="agentDouble"/>
+          <out id="cell_bf" datatype="agentDouble"/>
         </ports>
     </mapper>
     <mapper id="latticeDD2agents" type="fan-in">
         <ports>
           <in id="cell_positions" datatype="agentLocations"/>
           <in id="latticeDD" datatype="latticeDouble"/>
-          <out id="cell_bf" datatype="agentDouble"/>
+          <out id="cell_dd" datatype="agentDouble"/>
         </ports>
     </mapper>
     
