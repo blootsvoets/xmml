@@ -1,6 +1,10 @@
-xMML version 0.3.2
+xMML version 0.3.3
 ==================
-Date: 2011-07-07.
+Date: 2011-12-07.
+
+Changes since version 0.3.2
+* Changed the main description to W3C XML Schema Description.
+* Added a schema for the MAD tool
 
 Changes since version 0.3.1
 * Changed the 'max' attribute in scale to 'total'
