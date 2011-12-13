@@ -2,7 +2,7 @@
 <schema
   xmlns="http://www.w3.org/2001/XMLSchema"
   targetNamespace="http://www.mapper-project.eu/xmml"
-  xmlns:t="http://www.mapper-project.eu/xmml"
+  xmlns:xmml="http://www.mapper-project.eu/xmml"
   elementFormDefault="qualified">
 
 	<annotation><documentation>
@@ -21,65 +21,65 @@
 	  </documentation></annotation>
 		<complexType>
 			<sequence>
-				<element ref="t:description" minOccurs="0" maxOccurs="1"/>
-				<element ref="t:definitions"/>
-				<element ref="t:topology"/>
+				<element ref="xmml:description" minOccurs="0" maxOccurs="1"/>
+				<element ref="xmml:definitions"/>
+				<element ref="xmml:topology"/>
 			</sequence>
 			<attribute name="id" type="NCName" use="required"/>
 			<attribute name="name" type="string"/>
 			<attribute name="version" type="string"/>
-			<attribute name="xmml_version" fixed="0.3.3" type="t:version"/>
+			<attribute name="xmml_version" fixed="0.3.3" type="xmml:version"/>
 			<anyAttribute processContents="lax"/>
 		</complexType>
   
 		<unique name="datatypeId">
-			<selector xpath="t:definitions/t:datatype"/>
+			<selector xpath="xmml:definitions/xmml:datatype"/>
 			<field xpath="@id"/>
 		</unique>
 		<unique name="mapperId">
-			<selector xpath="t:definitions/t:mapper"/>
+			<selector xpath="xmml:definitions/xmml:mapper"/>
 			<field xpath="@id"/>
 		</unique>
 		<unique name="submodelId">
-			<selector xpath="t:definitions/t:submodel"/>
+			<selector xpath="xmml:definitions/xmml:submodel"/>
 			<field xpath="@id"/>
 		</unique>
 		<unique name="filterId">
-			<selector xpath="t:definitions/t:filter"/>
+			<selector xpath="xmml:definitions/xmml:filter"/>
 			<field xpath="@id"/>
 		</unique>
 		<unique name="instanceId">
-			<selector xpath="t:topology/t:instance"/>
+			<selector xpath="xmml:topology/xmml:instance"/>
 			<field xpath="@id"/>
 		</unique>
 		
-		<keyref name="datatypeInIdRef" refer="t:datatypeId">
-		  <selector xpath="t:definitions/t:filter"/>
+		<keyref name="datatypeInIdRef" refer="xmml:datatypeId">
+		  <selector xpath="xmml:definitions/xmml:filter"/>
 		  <field xpath="@datatype_in"/>
 	  </keyref>
-		<keyref name="datatypeOutIdRef" refer="t:datatypeId">
-		  <selector xpath="t:definitions/t:filter"/>
+		<keyref name="datatypeOutIdRef" refer="xmml:datatypeId">
+		  <selector xpath="xmml:definitions/xmml:filter"/>
 		  <field xpath="@datatype_out"/>
 	  </keyref>
-		<keyref name="datatypePortIdRef" refer="t:datatypeId">
-		  <selector xpath="t:definitions/t:*/t:ports/t:*"/>
+		<keyref name="datatypePortIdRef" refer="xmml:datatypeId">
+		  <selector xpath="xmml:definitions/xmml:*/xmml:ports/xmml:*"/>
 		  <field xpath="@datatype"/>
 	  </keyref>
-		<keyref name="mapperIdRef" refer="t:mapperId">
-		  <selector xpath="t:topology/t:instance"/>
+		<keyref name="mapperIdRef" refer="xmml:mapperId">
+		  <selector xpath="xmml:topology/xmml:instance"/>
 		  <field xpath="@mapper"/>
 	  </keyref>
-		<keyref name="submodelIdRef" refer="t:submodelId">
-		  <selector xpath="t:topology/t:instance"/>
+		<keyref name="submodelIdRef" refer="xmml:submodelId">
+		  <selector xpath="xmml:topology/xmml:instance"/>
 		  <field xpath="@submodel"/>
 	  </keyref>
-		<keyref name="filterIdRef" refer="t:filterId">
-		  <selector xpath="t:topology/t:coupling/t:apply"/>
+		<keyref name="filterIdRef" refer="xmml:filterId">
+		  <selector xpath="xmml:topology/xmml:coupling/xmml:apply"/>
 		  <field xpath="@filter"/>
 	  </keyref>
 	</element>
 
-	<element name="description" type="t:anyContent">
+	<element name="description" type="xmml:anyContent">
 	  <annotation><documentation>
 	    A short textual description of the parent element.
 	  </documentation></annotation>
@@ -91,11 +91,11 @@
 	  </documentation></annotation>
 		<complexType>
 			<sequence>
-				<element ref="t:datatype" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:datatype" minOccurs="0" maxOccurs="unbounded"/>
 				<choice minOccurs="0" maxOccurs="unbounded">
-					<element ref="t:filter"/>
-					<element ref="t:mapper"/>
-					<element ref="t:submodel"/>
+					<element ref="xmml:filter"/>
+					<element ref="xmml:mapper"/>
+					<element ref="xmml:submodel"/>
 				</choice>
 			</sequence>
   		<anyAttribute processContents="lax"/>
@@ -107,8 +107,8 @@
 	    A datatype definition.
 	  </documentation></annotation>
 		<complexType><complexContent>
-		  <extension base="t:definition">
-  			<attribute name="size_estimate" type="t:formula">
+		  <extension base="xmml:definition">
+  			<attribute name="size_estimate" type="xmml:formula">
   			  <annotation><documentation>
   			    A function in terms of the scales and params of the
   			    submodel it originated from.
@@ -124,12 +124,12 @@
       certain factor, or interpolating in that dimension.
     </documentation></annotation>
 		<complexType><complexContent>
-		  <extension base="t:definition">
+		  <extension base="xmml:definition">
   			<sequence>
-  				<element ref="t:description" minOccurs="0" maxOccurs="1"/>
-  				<element ref="t:param" minOccurs="0" maxOccurs="unbounded"/>
-  				<element ref="t:implementation" minOccurs="0" maxOccurs="1"/>
-  				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:description" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:param" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:implementation" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
   			</sequence>
   			<attribute name="datatype_in" type="NCName"/>
   			<attribute name="datatype_out" type="NCName"/>
@@ -143,11 +143,11 @@
   				</simpleType>
   			</attribute>
   			<attribute name="dimension" type="string"/>
-  			<attribute name="factor" type="t:formula"/>
+  			<attribute name="factor" type="xmml:formula"/>
   		</extension>
 		</complexContent></complexType>
 		<unique name="filterParamId">
-			<selector xpath="t:param"/>
+			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
 	</element>
@@ -163,13 +163,13 @@
       specified.
     </documentation></annotation>
 		<complexType><complexContent>
-		  <extension base="t:computationalElement">
+		  <extension base="xmml:computationalElement">
   			<sequence>
-  				<element ref="t:description" minOccurs="0" maxOccurs="1"/>
-  				<element ref="t:param" minOccurs="0" maxOccurs="unbounded"/>
-  				<element ref="t:ports"/>
-  				<element ref="t:implementation" minOccurs="0" maxOccurs="1"/>
-  				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:description" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:param" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:ports"/>
+  				<element ref="xmml:implementation" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
   			</sequence>
   			<attribute name="type" use="required">
   				<simpleType>
@@ -182,7 +182,7 @@
   		</extension>
 		</complexContent></complexType>
 		<unique name="mapperParamId">
-			<selector xpath="t:param"/>
+			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
 	</element>
@@ -196,39 +196,39 @@
       the submodel.
     </documentation></annotation>
 		<complexType><complexContent>
-		  <extension base="t:computationalElement">
+		  <extension base="xmml:computationalElement">
   			<sequence>
-  				<element ref="t:description" minOccurs="0" maxOccurs="1"/>
-  				<element ref="t:timescale"/>
-  				<element ref="t:spacescale" minOccurs="0" maxOccurs="unbounded"/>
-  				<element ref="t:otherscale" minOccurs="0" maxOccurs="unbounded"/>
-  				<element ref="t:param" minOccurs="0" maxOccurs="unbounded"/>
-  				<element ref="t:ports"/>
-  				<element ref="t:implementation" minOccurs="0" maxOccurs="1"/>
-  				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:description" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:timescale"/>
+  				<element ref="xmml:spacescale" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:otherscale" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:param" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:ports"/>
+  				<element ref="xmml:implementation" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
   			</sequence>
   			<attribute name="name" type="string"/>
-  			<attribute name="stateful" type="t:OptionalChoice" default="no"/>
+  			<attribute name="stateful" type="xmml:OptionalChoice" default="no"/>
   		</extension>
 		</complexContent></complexType>
 		<unique name="submodelParamId">
-			<selector xpath="t:param"/>
+			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
 		<unique name="submodelScaleName">
-			<selector xpath="t:timescale | t:spacescale | t.otherscale"/>
+			<selector xpath="xmml:timescale | xmml:spacescale | t.otherscale"/>
 			<field xpath="@id"/>
 		</unique>
 	</element>
 
-	<element name="timescale" type="t:scale">
+	<element name="timescale" type="xmml:scale">
 	  <annotation><documentation>
 	    Temporal scale specification of a submodel. Using the attributes, it is a regular
 	    scale, using child elements it is a full scale specification.
     </documentation></annotation>
 	</element>
 
-	<element name="spacescale" type="t:multiDimensionalScale">
+	<element name="spacescale" type="xmml:multiDimensionalScale">
 		<annotation><documentation>
 	    Spatial scale specification of a submodel. Using the attributes, it is a regular
 	    scale, using child elements it is a full scale specification.
@@ -245,7 +245,7 @@
 	    dimensions can be given as an attribute, using only one tag.
     </documentation></annotation>
 	  <complexType><complexContent>
-	    <extension base="t:multiDimensionalScale">
+	    <extension base="xmml:multiDimensionalScale">
 			  <attribute name="type" type="string"/>
 		  </extension>
 		</complexContent></complexType>
@@ -258,13 +258,14 @@
        submodel, since this should be done at time of execution.
     </documentation></annotation>
 		<complexType>
+			<sequence><element ref="xmml:description" minOccurs="0" maxOccurs="1"/></sequence>
 			<attribute name="id" type="NCName" use="required"/>
 			<attribute name="value" type="string" use="required"/>
   		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 
-	<element name="extra" type="t:anyContent">
+	<element name="extra" type="xmml:anyContent">
 	  <annotation><documentation>
 	    Any information about an element not captured by any of the other tags.
       If this is used, possibly the information therein can also be included
@@ -278,8 +279,8 @@
     </documentation></annotation>
 		<complexType>
 			<choice minOccurs="0" maxOccurs="unbounded">
-      	<element name="in" type="t:port"/>
-      	<element name="out" type="t:port"/>
+      	<element name="in" type="xmml:port"/>
+      	<element name="out" type="xmml:port"/>
 			</choice>
 		</complexType>
 		<unique name="portId">
@@ -294,8 +295,8 @@
     </documentation></annotation>
 		<complexType>
 			<sequence>
-				<element ref="t:instance" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:coupling" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:instance" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:coupling" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
   		<anyAttribute processContents="lax"/>
 		</complexType>
@@ -310,21 +311,21 @@
     </documentation></annotation>
 		<complexType>
 			<sequence>
-				<element ref="t:timescale" minOccurs="0" maxOccurs="1"/>
-				<element ref="t:spacescale" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:otherscale" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:param" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:timescale" minOccurs="0" maxOccurs="1"/>
+				<element ref="xmml:spacescale" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:otherscale" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:param" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
 			<attribute name="id" type="NCName"/>
 			<attribute name="submodel" type="NCName"/>
 			<attribute name="mapper" type="NCName"/>
-			<attribute name="domain" type="t:domain"><annotation><documentation>
+			<attribute name="domain" type="xmml:domain"><annotation><documentation>
 			  A domain name may be supplied, used to identify single domain interaction.
 			  </documentation></annotation></attribute>
-			<attribute name="init" type="t:YesNoChoice"/>
-			<attribute name="interactive" type="t:OptionalChoice"/>
-			<attribute name="stateful" type="t:OptionalChoice"/>
+			<attribute name="init" type="xmml:YesNoChoice"/>
+			<attribute name="interactive" type="xmml:OptionalChoice"/>
+			<attribute name="stateful" type="xmml:OptionalChoice"/>
 			<attribute name="multiplicity">
 			  <annotation><documentation>
 			    A multiplicity is a number that specifies how many instances should be
@@ -340,7 +341,7 @@
 			<anyAttribute processContents="lax"/>
 		</complexType>
 		<unique name="instanceParamId">
-			<selector xpath="t:param"/>
+			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
 	</element>
@@ -352,16 +353,16 @@
     </documentation></annotation>
 	  <complexType>
 			<sequence>
-				<element ref="t:apply" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:apply" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
 			<attribute name="name" type="string"/>
-			<attribute name="from" type="t:instancePort" use="required"/>
-			<attribute name="to" type="t:instancePort" use="required"/>
-			<attribute name="size" type="t:unit"><annotation><documentation>
+			<attribute name="from" type="xmml:instancePort" use="required"/>
+			<attribute name="to" type="xmml:instancePort" use="required"/>
+			<attribute name="size" type="xmml:unit"><annotation><documentation>
 			  Size can be specified if not already done in the datatypes.
 			  </documentation></annotation></attribute>
-			<attribute name="interactive" type="t:OptionalChoice" default="no">
+			<attribute name="interactive" type="xmml:OptionalChoice" default="no">
 			    <annotation><documentation>
   			  Whether the data that is sent through the conduit must be evaluated manually
           before it can be passed to the next.</documentation></annotation></attribute>
@@ -376,17 +377,17 @@
     </documentation></annotation>
 		<complexType>
 			<sequence>
-				<element ref="t:param" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:extra" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:param" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
 			<attribute name="filter" type="NCName" use="required"/>
-			<attribute name="factor" type="t:formula"><annotation><documentation>
+			<attribute name="factor" type="xmml:formula"><annotation><documentation>
 			  Overrides the factor belonging to the filter.
 			  </documentation></annotation></attribute>
 			<anyAttribute processContents="lax"/>
 		</complexType>
 		<unique name="applyParamId">
-			<selector xpath="t:param"/>
+			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
 	</element>
@@ -399,16 +400,16 @@
 	  </documentation></annotation>
 		<complexType>
 			<sequence>
-				<element ref="t:platform" minOccurs="0" maxOccurs="unbounded"/>
-				<element ref="t:library" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:platform" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:library" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
-			<attribute name="size" type="t:unit"><annotation><documentation>
+			<attribute name="size" type="xmml:unit"><annotation><documentation>
 			  Size of the compiled code.
 			  </documentation></annotation></attribute>
-			<attribute name="runtime" type="t:unit"><annotation><documentation>
+			<attribute name="runtime" type="xmml:unit"><annotation><documentation>
 			  Typical estimated runtime on the preferred platform.
 			  </documentation></annotation></attribute>             
-			<attribute name="memory" type="t:unit"/>
+			<attribute name="memory" type="xmml:unit"/>
 			<attribute name="cores" type="positiveInteger"/>
 			<attribute name="language" type="string"><annotation><documentation>
 			  The programming language that is used.</documentation></annotation></attribute>
@@ -420,7 +421,7 @@
 		<complexType>
 			<attribute name="arch" type="string"/>
 			<attribute name="os" type="string" use="required"/>
-			<attribute name="preferred" type="t:YesNoChoice"/>
+			<attribute name="preferred" type="xmml:YesNoChoice"/>
   		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
@@ -436,18 +437,18 @@
 	
 	<complexType name="scale">
 		<sequence>
-			<element name="delta" type="t:range" minOccurs="0" maxOccurs="1"/>
-			<element name="total" type="t:range" minOccurs="0" maxOccurs="1"/>
+			<element name="delta" type="xmml:range" minOccurs="0" maxOccurs="1"/>
+			<element name="total" type="xmml:range" minOccurs="0" maxOccurs="1"/>
 		</sequence>
 		<attribute name="id" type="NCName"/>
-		<attribute name="delta" type="t:unit"/>
-		<attribute name="total" type="t:unit"/>
-		<attribute name="characteristic" type="t:unit"/>
+		<attribute name="delta" type="xmml:unit"/>
+		<attribute name="total" type="xmml:unit"/>
+		<attribute name="characteristic" type="xmml:unit"/>
 		<anyAttribute processContents="lax"/>
 	</complexType>
  
  	<complexType name="multiDimensionalScale"><complexContent>
-    <extension base="t:scale">
+    <extension base="xmml:scale">
 		  <attribute name="dimensions" type="positiveInteger"/>
 	  </extension></complexContent>
 	</complexType>
@@ -466,9 +467,9 @@
     <annotation><documentation>
       Represent a computational element.
     </documentation></annotation>
-    <complexContent><extension base="t:definition">
-      <attribute name="init" type="t:YesNoChoice" default="no"/>
-			<attribute name="interactive" type="t:OptionalChoice" default="no"/>
+    <complexContent><extension base="xmml:definition">
+      <attribute name="init" type="xmml:YesNoChoice" default="no"/>
+			<attribute name="interactive" type="xmml:OptionalChoice" default="no"/>
     </extension></complexContent>
   </complexType>
 
@@ -582,7 +583,7 @@
     </annotation>
     
 		<attribute name="id" type="NCName" use="required"/>
-		<attribute name="operator" type="t:SEL"/>
+		<attribute name="operator" type="xmml:SEL"/>
 		<attribute name="datatype" type="NCName"/>
 		<attribute name="type" default="normal">
 			<simpleType>
@@ -610,8 +611,8 @@
 				</restriction>
 			</simpleType>
 		</attribute>
-		<attribute name="min" type="t:unit"/>
-		<attribute name="max" type="t:unit"/>
+		<attribute name="min" type="xmml:unit"/>
+		<attribute name="max" type="xmml:unit"/>
 		<anyAttribute processContents="lax"/>
 	</complexType>
 </schema>
