@@ -7,6 +7,9 @@
   <definitions>
     <xi:include href="isr_meta.xml#xpointer(/metadata/*)"/>
 
+    <terminal id="filereader" type="source"/>
+    <terminal id="filewriter" type="sink"/>
+
     <mapper id="agents2lattice" type="fan-out">
 	<description>
            Maps a number of agents or particles to a lattice.
@@ -108,6 +111,8 @@
     <instance mapper="latticeDD2agents" domain="artery.tissue"/>
     <instance mapper="latticeBF2agents" domain="artery"/>
     <instance mapper="agents2lattice" domain="artery"/>
+    
+    <instance terminal="filereader"/>
     
     <coupling mad:fromPortId="005" from="ic.cells" to="smc.initial_positions" size="10 MB"/>
     <coupling from="smc.cell_positions" to="agents2lattice.cell_info"/>

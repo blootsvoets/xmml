@@ -40,6 +40,10 @@
 			<selector xpath="xmml:definitions/xmml:mapper"/>
 			<field xpath="@id"/>
 		</unique>
+		<unique name="terminalId">
+			<selector xpath="xmml:definitions/xmml:terminal"/>
+			<field xpath="@id"/>
+		</unique>
 		<unique name="submodelId">
 			<selector xpath="xmml:definitions/xmml:submodel"/>
 			<field xpath="@id"/>
@@ -69,6 +73,10 @@
 		  <selector xpath="xmml:topology/xmml:instance"/>
 		  <field xpath="@mapper"/>
 	  </keyref>
+		<keyref name="terminalIdRef" refer="xmml:terminalId">
+		  <selector xpath="xmml:topology/xmml:instance"/>
+		  <field xpath="@terminal"/>
+	  </keyref>
 		<keyref name="submodelIdRef" refer="xmml:submodelId">
 		  <selector xpath="xmml:topology/xmml:instance"/>
 		  <field xpath="@submodel"/>
@@ -93,6 +101,7 @@
 			<sequence>
 				<element ref="xmml:datatype" minOccurs="0" maxOccurs="unbounded"/>
 				<choice minOccurs="0" maxOccurs="unbounded">
+					<element ref="xmml:terminal"/>
 					<element ref="xmml:filter"/>
 					<element ref="xmml:mapper"/>
 					<element ref="xmml:submodel"/>
@@ -147,6 +156,36 @@
   		</extension>
 		</complexContent></complexType>
 		<unique name="filterParamId">
+			<selector xpath="xmml:param"/>
+			<field xpath="@id"/>
+		</unique>
+	</element>
+
+	<element name="terminal">
+	  <annotation><documentation>
+            A terminal connection, either a source or a sink. This can pass predefined parameters
+            or file contents, or simply empty datastructures.
+          </documentation></annotation>
+		<complexType><complexContent>
+		  <extension base="xmml:computationalElement">
+  			<sequence>
+  				<element ref="xmml:description" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:param" minOccurs="0" maxOccurs="unbounded"/>
+  				<element ref="xmml:ports"/>
+  				<element ref="xmml:implementation" minOccurs="0" maxOccurs="1"/>
+  				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
+  			</sequence>
+  			<attribute name="type" use="required">
+  				<simpleType>
+  					<restriction base="NCName">
+  						<enumeration value="source"/>
+  						<enumeration value="sink"/>
+  					</restriction>
+  				</simpleType>
+  			</attribute>
+  		</extension>
+		</complexContent></complexType>
+		<unique name="mapperParamId">
 			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
@@ -320,6 +359,7 @@
 			<attribute name="id" type="NCName"/>
 			<attribute name="submodel" type="NCName"/>
 			<attribute name="mapper" type="NCName"/>
+			<attribute name="terminal" type="NCName"/>
 			<attribute name="domain" type="xmml:domain"><annotation><documentation>
 			  A domain name may be supplied, used to identify single domain interaction.
 			  </documentation></annotation></attribute>
@@ -348,7 +388,7 @@
 
 	<element name="coupling">
 	  <annotation><documentation>
-  	  A coupling from one submodel instance or mapper to the other.
+  	  A coupling from one submodel instance, mapper, or terminal to the other.
       Notation: instance1.outport to instance2.inport. .
     </documentation></annotation>
 	  <complexType>

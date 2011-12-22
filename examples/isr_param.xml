@@ -11,8 +11,7 @@
 <parameters  xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
    xmlns:xmml='http://www.mapper-project.eu/xmml'
    xmlns='http://www.mapper-project.eu/xmml/param'
-   xsi:schemaLocation='http://www.mapper-project.eu/xmml file:/Users/jborgdo1/Developer/xml/xmml/xmml.xsd
-   http://www.mapper-project.eu/xmml/param file:/Users/jborgdo1/Developer/xml/xmml/xmml_param.xsd' id="ISR2D" name="Basic parameters" xmml_version="0.3.3">
+   id="ISR2D" name="Basic parameters" xmml_version="0.3.3">
 	<parameterGroup submodel="DD">
 		<xmml:param id="dd" value="dd"/>
 	</parameterGroup>
