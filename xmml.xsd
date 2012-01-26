@@ -185,7 +185,7 @@
   			</attribute>
   		</extension>
 		</complexContent></complexType>
-		<unique name="mapperParamId">
+		<unique name="terminalParamId">
 			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
@@ -453,6 +453,7 @@
 			<attribute name="cores" type="positiveInteger"/>
 			<attribute name="language" type="string"><annotation><documentation>
 			  The programming language that is used.</documentation></annotation></attribute>
+			<attribute name="path" type="string"/>
   		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
@@ -469,7 +470,8 @@
 	<element name="library">
 		<complexType>
 			<attribute name="name" type="string" use="required"/>
-  		<anyAttribute processContents="lax"/>
+			<attribute name="path" type="string"/>
+			<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 	
