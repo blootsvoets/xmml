@@ -113,8 +113,18 @@
   			    A function in terms of the scales and params of the
   			    submodel it originated from.
   			  </documentation></annotation></attribute>
+  			<attribute name="extends" type="string">
+  			  <annotation><documentation>
+  			    Possibility to extend another datatype, such that
+                all information in the inherited datatype is also
+                available in the current datatype.
+              </documentation></annotation></attribute>
 			</extension>
 		</complexContent></complexType>
+		<keyref name="datatypeExtendsInIdRef" refer="t:datatypeId">
+		  <selector xpath="t:datatype"/>
+		  <field xpath="@extends"/>
+	  </keyref>
 	</element>
 
 	<element name="filter">
