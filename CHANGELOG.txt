@@ -8,6 +8,7 @@ Changes since version 0.3.3
 * Added a fan-in-out mapper type
 * Added a format to specify parameters in, by name of xmml_param.xsd
 * Added a path property to implementation and library
+* Removed DTD version, we've fully switched to XSD.
 
 Changes since version 0.3.2
 * Changed the main description to W3C XML Schema Description.
