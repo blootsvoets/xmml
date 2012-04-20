@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="no"?>
-<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.3.3" xmlns="http://www.mapper-project.eu/xmml" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:mad="http://www.mapper-project.eu/mad">
+<model id="ISR2D" name="In-stent restenosis 2D" xmml_version="0.4" xmlns="http://www.mapper-project.eu/xmml" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:mad="http://www.mapper-project.eu/mad">
   <description>
     A model of the process that occurs in the artery after stenting.
   </description>
@@ -7,8 +7,16 @@
   <definitions>
     <xi:include href="isr_meta.xml#xpointer(/metadata/*)"/>
 
-    <terminal id="filereader" type="source"/>
-    <terminal id="filewriter" type="sink"/>
+    <terminal id="agentreader" type="source">
+        <ports>
+            <out id="data" datatype="agentFull"/>
+        </ports>
+    </terminal>
+    <terminal id="latticewriter" type="sink">
+        <ports>
+            <out id="data" datatype="latticeInt"/>
+        </ports>
+    </terminal>
 
     <mapper id="agents2lattice" type="fan-out">
 	<description>
@@ -112,7 +120,7 @@
     <instance mapper="latticeBF2agents" domain="artery"/>
     <instance mapper="agents2lattice" domain="artery"/>
     
-    <instance terminal="filereader"/>
+    <instance terminal="agentreader"/>
     
     <coupling mad:fromPortId="005" from="ic.cells" to="smc.initial_positions" size="10 MB"/>
     <coupling from="smc.cell_positions" to="agents2lattice.cell_info"/>

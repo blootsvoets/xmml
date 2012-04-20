@@ -43,7 +43,7 @@
 				<annotation><documentation>
 					The name of this parameter set.
 				</documentation></annotation></attribute>
-			<attribute name="xmml_version" fixed="0.3.3" type="xmml:version"/>
+			<attribute name="xmml_version" fixed="0.4" type="xmml:version"/>
 			<anyAttribute processContents="lax"/>
 		</complexType>
   

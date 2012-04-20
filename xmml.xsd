@@ -28,7 +28,7 @@
 			<attribute name="id" type="NCName" use="required"/>
 			<attribute name="name" type="string"/>
 			<attribute name="version" type="string"/>
-			<attribute name="xmml_version" fixed="0.3.3" type="xmml:version"/>
+			<attribute name="xmml_version" fixed="0.4" type="xmml:version"/>
 			<anyAttribute processContents="lax"/>
 		</complexType>
   
@@ -130,8 +130,8 @@
               </documentation></annotation></attribute>
 			</extension>
 		</complexContent></complexType>
-		<keyref name="datatypeExtendsInIdRef" refer="t:datatypeId">
-		  <selector xpath="t:datatype"/>
+		<keyref name="datatypeExtendsInIdRef" refer="xmml:datatypeId">
+		  <selector xpath="xmml:datatype"/>
 		  <field xpath="@extends"/>
 	  </keyref>
 	</element>
@@ -174,7 +174,7 @@
 	<element name="terminal">
 	  <annotation><documentation>
             A terminal connection, either a source or a sink. This can pass predefined parameters
-            or file contents, or simply empty datastructures.
+            or file contents, or simply empty datastructures. It is allowed to have a single port.
           </documentation></annotation>
 		<complexType><complexContent>
 		  <extension base="xmml:computationalElement">
@@ -195,7 +195,7 @@
   			</attribute>
   		</extension>
 		</complexContent></complexType>
-		<unique name="mapperParamId">
+		<unique name="terminalParamId">
 			<selector xpath="xmml:param"/>
 			<field xpath="@id"/>
 		</unique>
@@ -203,13 +203,15 @@
 
 	<element name="mapper">
 	  <annotation><documentation>
-	    A fan-in or fan-out mapper. If the type is fan-in, it may have multiple
+	    A fan-in, or fan-out, or fan-in-out mapper. If the type is fan-in, it may have multiple
       in ports and one out port, otherwise, one in port and multiple out ports.
       Implementation details may also be relevant. A fan-in mapper may have
       the same in port used for a submodel instance with a multiplicity, and
       conversely for the fan-out mapper. A filter with multiple inputs can be
       constructed as a fan-in mapper. In and out ports may not have an operator
-      specified.
+      specified. A fan-in-out mapper may have multiple in- and out ports
+      but still has the limitation that it needs all inputs to have a message,
+      and then it sends one message to each output.
     </documentation></annotation>
 		<complexType><complexContent>
 		  <extension base="xmml:computationalElement">
@@ -225,6 +227,7 @@
   					<restriction base="NCName">
   						<enumeration value="fan-in"/>
   						<enumeration value="fan-out"/>
+  						<enumeration value="fan-in-out"/>
   					</restriction>
   				</simpleType>
   			</attribute>
@@ -463,6 +466,7 @@
 			<attribute name="cores" type="positiveInteger"/>
 			<attribute name="language" type="string"><annotation><documentation>
 			  The programming language that is used.</documentation></annotation></attribute>
+			<attribute name="path" type="string"/>
   		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
@@ -479,7 +483,8 @@
 	<element name="library">
 		<complexType>
 			<attribute name="name" type="string" use="required"/>
-  		<anyAttribute processContents="lax"/>
+			<attribute name="path" type="string"/>
+            <anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
 	
