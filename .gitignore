@@ -4,3 +4,4 @@ release/*
 /build
 manifest.mf
 .project
+/build.xml
