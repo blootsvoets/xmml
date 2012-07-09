@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="external/xs3p-1/xs3p.xsl"?>
 <schema
   xmlns="http://www.w3.org/2001/XMLSchema"
   targetNamespace="http://www.mapper-project.eu/xmml"
@@ -17,7 +18,7 @@
   
 	<element name="model">
 	  <annotation><documentation>
-	    Root element of a single multiscale model.
+	    Root element of a multiscale model.
 	  </documentation></annotation>
 		<complexType>
 			<sequence>
@@ -28,7 +29,7 @@
 			<attribute name="id" type="NCName" use="required"/>
 			<attribute name="name" type="string"/>
 			<attribute name="version" type="string"/>
-			<attribute name="xmml_version" fixed="0.3.3" type="xmml:version"/>
+			<attribute name="xmml_version" fixed="0.4" type="xmml:version"/>
 			<anyAttribute processContents="lax"/>
 		</complexType>
   
@@ -122,8 +123,18 @@
   			    A function in terms of the scales and params of the
   			    submodel it originated from.
   			  </documentation></annotation></attribute>
+  			<attribute name="extends" type="string">
+  			  <annotation><documentation>
+  			    Possibility to extend another datatype, such that
+                all information in the inherited datatype is also
+                available in the current datatype.
+              </documentation></annotation></attribute>
 			</extension>
 		</complexContent></complexType>
+		<keyref name="datatypeExtendsInIdRef" refer="xmml:datatypeId">
+		  <selector xpath="xmml:datatype"/>
+		  <field xpath="@extends"/>
+	  </keyref>
 	</element>
 
 	<element name="filter">
@@ -164,7 +175,7 @@
 	<element name="terminal">
 	  <annotation><documentation>
             A terminal connection, either a source or a sink. This can pass predefined parameters
-            or file contents, or simply empty datastructures.
+            or file contents, or simply empty datastructures. It is allowed to have a single port.
           </documentation></annotation>
 		<complexType><complexContent>
 		  <extension base="xmml:computationalElement">
@@ -193,13 +204,15 @@
 
 	<element name="mapper">
 	  <annotation><documentation>
-	    A fan-in or fan-out mapper. If the type is fan-in, it may have multiple
+	    A fan-in, or fan-out, or fan-in-out mapper. If the type is fan-in, it may have multiple
       in ports and one out port, otherwise, one in port and multiple out ports.
       Implementation details may also be relevant. A fan-in mapper may have
       the same in port used for a submodel instance with a multiplicity, and
       conversely for the fan-out mapper. A filter with multiple inputs can be
       constructed as a fan-in mapper. In and out ports may not have an operator
-      specified.
+      specified. A fan-in-out mapper may have multiple in- and out ports
+      but still has the limitation that it needs all inputs to have a message,
+      and then it sends one message to each output.
     </documentation></annotation>
 		<complexType><complexContent>
 		  <extension base="xmml:computationalElement">
@@ -215,6 +228,7 @@
   					<restriction base="NCName">
   						<enumeration value="fan-in"/>
   						<enumeration value="fan-out"/>
+  						<enumeration value="fan-in-out"/>
   					</restriction>
   				</simpleType>
   			</attribute>

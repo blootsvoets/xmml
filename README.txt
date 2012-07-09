@@ -1,4 +1,4 @@
-The xMML format, version 0.3.3
+The xMML format, version 0.4
 ==============================
 
 The xMML format is documented in xmml.xsd, and a brief introducion

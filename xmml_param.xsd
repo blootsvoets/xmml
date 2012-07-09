@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="external/xs3p-1/xs3p.xsl"?>
 <schema
   xmlns="http://www.w3.org/2001/XMLSchema"
   targetNamespace="http://www.mapper-project.eu/xmml/param"
@@ -43,7 +44,7 @@
 				<annotation><documentation>
 					The name of this parameter set.
 				</documentation></annotation></attribute>
-			<attribute name="xmml_version" fixed="0.3.3" type="xmml:version"/>
+			<attribute name="xmml_version" fixed="0.4" type="xmml:version"/>
 			<anyAttribute processContents="lax"/>
 		</complexType>
   

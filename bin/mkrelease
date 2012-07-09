@@ -18,8 +18,8 @@ if [[ $? -ne 0 ]]; then
   exit
 fi
 
-mkdir -p $DIR
-mkdir -p $TARDIR
+mkdir -p $DIR/doc
+mkdir -p $TARDIR/doc
 if [[ `grep \"$VERSION\" xmml.dtd | wc -l` -gt 0 ]]; then
 	cp xmml.dtd $DIR/xmml-$VERSION.dtd
 	cp xmml.dtd $TARDIR/xmml.dtd
@@ -36,8 +36,22 @@ else
 	SUCCEED=1
 fi
 
+
+if [[ `grep \'$VERSION\' xmml_param.xsd | wc -l` -gt 0 ]]; then
+	cp xmml_param.xsd $DIR/xmml_param-$VERSION.xsd
+	cp xmml_param.xsd $TARDIR/xmml_param.xsd
+else
+	echo "WARNING: xMML Param Schema Definition does not match version of Git repository"
+	SUCCEED=1
+fi
+
+
 cp CHANGELOG.txt $DIR/CHANGELOG.txt
 cp CHANGELOG.txt $TARDIR/CHANGELOG.txt
+
+ant
+cp doc/* $DIR/doc
+cp doc/* $TARDIR/doc
 
 mv $DIR $DIR.tmp
 mv $TARDIR $DIR
