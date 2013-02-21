@@ -54,6 +54,17 @@
       <ports>
         <out id="cells" operator="Of" datatype="agentLocations"/>
       </ports>
+      <implementation>
+        <interpreter name="muscle2"/>
+        <code language="Java" part="header">
+            import isr3d.data.AgentLocations;
+        </code>
+        <code language="Java" part="Of">
+            int dataSize = getIntProperty("datasize");
+            AgentLocations data = AgentLocations.createRandom(dataSize);
+            out("cells").send(data);
+        </code>
+      </implementation>
     </submodel>
   
     <submodel id="BF" name="Blood flow" stateful="optional" class="nl.computationalscience.uva.isr3d.kernel.bf.BFController">

@@ -151,9 +151,18 @@
   				<element ref="xmml:implementation" minOccurs="0" maxOccurs="1"/>
   				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
   			</sequence>
-  			<attribute name="datatype_in" type="NCName"/>
-  			<attribute name="datatype_out" type="NCName"/>
-  			<attribute name="type" use="required">
+  			<attribute name="datatype_in" type="NCName"><annotation><documentation>
+				  Data type that the filter accepts as input.
+				 </documentation></annotation></attribute>
+  			<attribute name="datatype_out" type="NCName"><annotation><documentation>
+ 				  Data type that the filter will give as output.
+ 				 </documentation></annotation></attribute>
+  			<attribute name="type" use="required"><annotation><documentation>
+  				  Type of action that the filter will do. Interpolation produces more
+  				  output messages than input messages by some form of interpolation.
+  				  Reduction produces less messages than it receives. And finally, a
+  				  converter only alters the messages that it receives.
+  				 </documentation></annotation>
   				<simpleType>
   					<restriction base="NCName">
   						<enumeration value="interpolation"/>
@@ -162,8 +171,13 @@
   					</restriction>
   				</simpleType>
   			</attribute>
-  			<attribute name="dimension" type="string"/>
-  			<attribute name="factor" type="xmml:formula"/>
+  			<attribute name="dimension" type="string"><annotation><documentation>
+  				  The dimension over which the filter is applied. Use either the id
+  				  or the name of the dimension.
+  				 </documentation></annotation></attribute>
+  			<attribute name="factor" type="xmml:formula"><annotation><documentation>
+ 				  The filter may take a single argument, often a factor.
+ 				 </documentation></annotation></attribute>
   		</extension>
 		</complexContent></complexType>
 		<unique name="filterParamId">
@@ -175,7 +189,7 @@
 	<element name="terminal">
 	  <annotation><documentation>
             A terminal connection, either a source or a sink. This can pass predefined parameters
-            or file contents, or simply empty datastructures. It is allowed to have a single port.
+            or file contents, or simply empty data structures. It is allowed to have a single port.
           </documentation></annotation>
 		<complexType><complexContent>
 		  <extension base="xmml:computationalElement">
@@ -260,8 +274,20 @@
   				<element ref="xmml:implementation" minOccurs="0" maxOccurs="1"/>
   				<element ref="xmml:extra" minOccurs="0" maxOccurs="unbounded"/>
   			</sequence>
-  			<attribute name="name" type="string"/>
-  			<attribute name="stateful" type="xmml:OptionalChoice" default="no"/>
+  			<attribute name="name" type="string"><annotation><documentation>
+				  A more descriptive name for the submodel, using any characters.
+				 </documentation></annotation></attribute>
+  			<attribute name="type" type="string"><annotation><documentation>
+				  The generic type of submodel. Other submodels with the same type are
+					interchangeable with the current one but may use different algorithms to achieve the same goal.
+				 </documentation></annotation></attribute>
+  			<attribute name="stateful" type="xmml:OptionalChoice" default="no"><annotation><documentation>
+				  Whether the submodel has a state that should be preserved after finalization
+				so that it can be used in initialization. Usually, this can be achieved
+				by keeping the submodel active, but a runtime system may dictate that
+				the submodel is responsible of storing and restoring its state between
+				instantiations.
+				 </documentation></annotation></attribute>
   		</extension>
 		</complexContent></complexType>
 		<unique name="submodelParamId">
@@ -454,20 +480,35 @@
 	  </documentation></annotation>
 		<complexType>
 			<sequence>
+				<element ref="xmml:interpreter" minOccurs="0" maxOccurs="unbounded"/>
 				<element ref="xmml:platform" minOccurs="0" maxOccurs="unbounded"/>
 				<element ref="xmml:library" minOccurs="0" maxOccurs="unbounded"/>
+				<element ref="xmml:code" minOccurs="0" maxOccurs="unbounded"/>
 			</sequence>
 			<attribute name="size" type="xmml:unit"><annotation><documentation>
 			  Size of the compiled code.
 			  </documentation></annotation></attribute>
 			<attribute name="runtime" type="xmml:unit"><annotation><documentation>
-			  Typical estimated runtime on the preferred platform.
-			  </documentation></annotation></attribute>             
-			<attribute name="memory" type="xmml:unit"/>
-			<attribute name="cores" type="positiveInteger"/>
+			  Estimated typical runtime on the preferred platform.
+			  </documentation></annotation></attribute>
+			<attribute name="memory" type="xmml:unit"><annotation><documentation>
+				  Amount of memory that is needed for a simulation.</documentation></annotation></attribute>
+			<attribute name="cores" type="positiveInteger"><annotation><documentation>
+			  Number of cores that are typically needed for a simulation.</documentation></annotation></attribute>
 			<attribute name="language" type="string"><annotation><documentation>
 			  The programming language that is used.</documentation></annotation></attribute>
+			<attribute name="path" type="string">	<annotation><documentation>
+				 The path to the code.</documentation></annotation></attribute>
+  		<anyAttribute processContents="lax"/>
+		</complexType>
+	</element>
+
+	<element name="interpreter">
+		<complexType>
+			<attribute name="name" type="string"/>
 			<attribute name="path" type="string"/>
+			<attribute name="version" type="string"/>
+			<attribute name="flags" type="string"/>
   		<anyAttribute processContents="lax"/>
 		</complexType>
 	</element>
@@ -486,6 +527,27 @@
 			<attribute name="name" type="string" use="required"/>
 			<attribute name="path" type="string"/>
 			<anyAttribute processContents="lax"/>
+		</complexType>
+	</element>
+	
+	<element name="code">
+	  <annotation><documentation>
+	    Store the code of an implementation in some specification language.
+			Inside, any XML or text may be used, although for special characters, use
+			the CDATA directive. The language is the input language for the actual
+			code, which should be of the language specified in the 
+	  </documentation></annotation>
+		<complexType>
+			<complexContent>
+				<extension base="xmml:anyContent">
+					<attribute name="language" type="string" use="required"/>
+					<attribute name="version" type="string"/>
+					<attribute name="part" type="string"/>
+					<attribute name="compiler" type="string"/>
+					<attribute name="compilerflags" type="string"/>
+					<anyAttribute processContents="lax"/>
+				</extension>
+			</complexContent>
 		</complexType>
 	</element>
 	
